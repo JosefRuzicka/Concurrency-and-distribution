@@ -1,4 +1,3 @@
-//El siguiente Makefile fue programado por el profesor Jeisson Hidalgo 
 APPNAME=goldbach
 EXECUTABLES=$(APPNAME) $(APPNAME)_asan $(APPNAME)_msan $(APPNAME)_tsan $(APPNAME)_ubsan
 
