@@ -1,5 +1,6 @@
 // Copyright 2021 Josef Ruzicka <josef.ruzicka@ucr.ac.cr> CC-BY-4
 // Outputs the prime numbers that sum the user-given numbers.
+// 8/5/2021
 
 // #include <errno.h>
 // #include <pthread.h>
@@ -32,6 +33,7 @@ int main(void) {
 	
 	// get the prime numbers with sieve of Eratosthenes.
   int64_t* primeNumbers = sieveOfEratosthenes(largestInputNumber);
+  
   // Goldbachs Conjecture.
   goldbachConjecture(&inputNumbers, &primeNumbers, inputNumbersSize, largestInputNumber);
   
@@ -39,6 +41,7 @@ int main(void) {
   free(inputNumbers);
   free(primeNumbers);
   free(inputNumbersSizePtr);
+  free(input);
   return 0;
 }
 
@@ -54,7 +57,7 @@ int64_t* getInputNumbers(FILE* input, int** inputNumbersSize) {
   // the following code is based on the code shown at
   // http://jeisson.ecci.ucr.ac.cr/concurrente/2020c/lecciones/0118/
   // good_programming_practices.mp4, by Jeisson Hidalgo-Cespedes
-  while (fscanf(input,"%ld", &value) == 1) {
+  while (fscanf(input,"%lld", &value) == 1) {
 	  
 	// reallocation of memory.
     if (inputNumbersIndex%10 == 0){ // sizeof(inputNumbers)/sizeof(inputNumbers[0])) {
@@ -104,7 +107,6 @@ int64_t* sieveOfEratosthenes(int64_t largestInputNumber) {
 	  if (primeNumbers[primeNumbersIndex] != 0){
 			primeNumbersTemp[primeNumbersTempIndex] = primeNumbers[primeNumbersIndex];
 			primeNumbersTempIndex++;
-			//printf("%d\n", primeNumbersTemp[primeNumbersTempIndex-1]);
 		}
 	}
 	free(primeNumbers);
@@ -120,13 +122,13 @@ void goldbachConjecture(int64_t** inputNumbers, int64_t** primeNumbers, int inpu
 	// go through every input number.
 	for (long unsigned int inputNumbersIndex = 0; inputNumbersIndex < inputNumbersSize;
 	     inputNumbersIndex++){
-		int64_t* addends = calloc(inputNumbersIndex*2, sizeof(int64_t));
+		int64_t* addends = calloc(10, sizeof(int64_t));
 		int addendsIndex = 0;
 	  printf("%ld", llabs(inputNumbersReference[inputNumbersIndex]));
 		sumsCount = 0;
 		modulo = (llabs(inputNumbersReference[inputNumbersIndex])%2);
 		//check if number is in range
-		if (llabs(inputNumbersReference[inputNumbersIndex]) <= 5 || inputNumbersReference[inputNumbersIndex] > (2^63)-1) {
+		if (llabs(inputNumbersReference[inputNumbersIndex]) <= 5 || inputNumbersReference[inputNumbersIndex] > (9223372036854775807)) {
 		  printf(": NA\n");
 		}
 		
@@ -145,6 +147,11 @@ void goldbachConjecture(int64_t** inputNumbers, int64_t** primeNumbers, int inpu
 							//addends[addendsIndex+1] = addend2;
 							//printf("%ld\n", addends[addendsIndex]);
 							addendsIndex += 2;
+
+							// reallocation of memory.
+    						if (addendsIndex%10 == 0){
+	  							addends = (int64_t*) realloc(addends, (addendsIndex * 10) * sizeof(int64_t));
+							}
 						//}
 					  sumsCount++;
 					  }
@@ -183,9 +190,11 @@ void goldbachConjecture(int64_t** inputNumbers, int64_t** primeNumbers, int inpu
 							  addends[addendsIndex] = primeNumbersReference[addend1];
 							  addends[addendsIndex+1] = primeNumbersReference[addend2];
 							  addends[addendsIndex+2] = primeNumbersReference[addend3];
-							  //addends[addendsIndex+1] = addend2;
-							  //printf("%ld\n", addends[addendsIndex]);
 							  addendsIndex += 3;
+							  // reallocation of memory.
+    						if (addendsIndex%9 == 0){
+	  							addends = (int64_t*) realloc(addends, (addendsIndex * 9) * sizeof(int64_t));
+							}
 						  //}
 						    sumsCount++;
 						  }
@@ -223,7 +232,7 @@ int64_t getLargestNumber(int64_t** inputNumbers, int** inputNumbersSize) {
 		//printf("%d\n", *inputNumbersSize);
     
     if ((llabs(inputNumbersReference[index]) > largestInputNumber)
-      && (inputNumbersReference[index] <= (2^63)-1)){
+      && (inputNumbersReference[index] <= (9223372036854775807))){
       largestInputNumber = inputNumbersReference[index];
       //printf("largestSearch:");
 		  //printf("%ld\n", index);

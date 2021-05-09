@@ -1,1 +1,7 @@
 tests
+tareas/goldbach_serial.zip
+tareas/goldbach_serial/goldbach_asan
+tareas/goldbach_serial/goldbach_msan
+tareas/goldbach_serial/goldbach_tsan
+tareas/goldbach_serial/goldbach_ubsan
+tareas/goldbach_serial/input001.txt
