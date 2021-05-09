@@ -85,7 +85,7 @@ int64_t* sieveOfEratosthenes(int64_t largestInputNumber) {
 	
 	// dynamic memory structure initialization.
 	for (primeNumbersIndex = 2; primeNumbersIndex <= largestInputNumber;
-			 primeNumbersIndex++) {
+		primeNumbersIndex++) {
 		primeNumbers[primeNumbersIndex] = primeNumbersIndex;
 		primeNumbersCount++;
 		isPrime = true;
@@ -128,12 +128,12 @@ void goldbachConjecture(int64_t** inputNumbers, int64_t** primeNumbers, int inpu
 	     inputNumbersIndex++){
 		int64_t* addends = calloc(10, sizeof(int64_t));
 		int addendsIndex = 0;
-	  printf("%lld", llabs(inputNumbersReference[inputNumbersIndex]));
+	  	printf("%lld:", (inputNumbersReference[inputNumbersIndex]));
 		sumsCount = 0;
 		modulo = (llabs(inputNumbersReference[inputNumbersIndex])%2);
 		//check if number is in range
 		if (llabs(inputNumbersReference[inputNumbersIndex]) <= 5 || inputNumbersReference[inputNumbersIndex] > (9223372036854775807)) {
-		  printf(": NA\n");
+		  printf(" NA\n");
 		}
 		
 		// Goldbachs Strong Conjecture
@@ -143,37 +143,38 @@ void goldbachConjecture(int64_t** inputNumbers, int64_t** primeNumbers, int inpu
 				for (long unsigned int addend2 = addend1; addend2 < largestInputNumber; addend2++) {
 					// check if the sum of addends is equal to the inputNumber.
 					if (primeNumbersReference[addend1] != 0 && primeNumbersReference[addend2] != 0) {
-					  if ((llabs(primeNumbersReference[addend1]) + llabs(primeNumbersReference[addend2])) 
-					  == inputNumbersReference[inputNumbersIndex]) {
-						//if (inputNumbersReference[inputNumbersIndex] < 0){
-							addends[addendsIndex] = primeNumbersReference[addend1];
-							addends[addendsIndex+1] = primeNumbersReference[addend2];
-							//addends[addendsIndex+1] = addend2;
-							//printf("%ld\n", addends[addendsIndex]);
-							addendsIndex += 2;
+					  	if ((llabs(primeNumbersReference[addend1]) + llabs(primeNumbersReference[addend2])) 
+					  	== llabs(inputNumbersReference[inputNumbersIndex])) {
+							if (inputNumbersReference[inputNumbersIndex] < 0){
+								addends[addendsIndex] = primeNumbersReference[addend1];
+								addends[addendsIndex+1] = primeNumbersReference[addend2];
+								addendsIndex += 2;
 
-							// reallocation of memory.
-    						if (addendsIndex%10 == 0){
-	  							addends = (int64_t*) realloc(addends, (addendsIndex * 10) * sizeof(int64_t));
+								// reallocation of memory.
+    							if (addendsIndex%10 == 0){
+	  								addends = (int64_t*) realloc(addends, (addendsIndex * 10) * sizeof(int64_t));
+								}
 							}
-						//}
-					  sumsCount++;
-					  }
+					  		sumsCount++;
+						}
 					}
 				}
 			}
-			printf(" sums : ");
-			printf("%d", sumsCount);
-			printf(" : ");
-			addendsIndex = 0;
-			while (addends[addendsIndex] != 0){
-				if (addendsIndex > 0){
-					printf(", ");
+			// printing.
+			printf(" %d", sumsCount);
+			printf(" sums");
+			if (inputNumbersReference[inputNumbersIndex] < 0){
+				printf(": ");
+				addendsIndex = 0;
+				while (addends[addendsIndex] != 0){
+					if (addendsIndex > 0){
+						printf(", ");
+					}
+			  	printf("%ld", addends[addendsIndex]);
+			  	printf(" + ");
+			  	printf("%ld", addends[addendsIndex+1]);
+			  	addendsIndex += 2;
 				}
-			  printf("%ld", addends[addendsIndex]);
-			  printf(" + ");
-			  printf("%ld", addends[addendsIndex+1]);
-			  addendsIndex += 2;
 			}
 			printf("\n");	
 		}
@@ -185,41 +186,44 @@ void goldbachConjecture(int64_t** inputNumbers, int64_t** primeNumbers, int inpu
 				for (long unsigned int addend2 = addend1; addend2 < largestInputNumber; addend2++) {
 					for (long unsigned int addend3 = addend2; addend3 < largestInputNumber; addend3++) {
 						// check if the sum of addends is equal to the inputNumber.
-						if (primeNumbersReference[addend1] != 0 
-						 && primeNumbersReference[addend2] != 0 
+						if (primeNumbersReference[addend1] != 0 && primeNumbersReference[addend2] != 0 
 						 && primeNumbersReference[addend3] != 0){
-					    if (primeNumbersReference[addend1] + primeNumbersReference[addend2] 
-					      + primeNumbersReference[addend3] == inputNumbersReference[inputNumbersIndex]) {
-						    //if (inputNumbersReference[inputNumbersIndex] < 0){
-							  addends[addendsIndex] = primeNumbersReference[addend1];
-							  addends[addendsIndex+1] = primeNumbersReference[addend2];
-							  addends[addendsIndex+2] = primeNumbersReference[addend3];
-							  addendsIndex += 3;
-							  // reallocation of memory.
-    						if (addendsIndex%9 == 0){
-	  							addends = (int64_t*) realloc(addends, (addendsIndex * 9) * sizeof(int64_t));
-							}
-						  //}
-						    sumsCount++;
-						  }
+					    	if (primeNumbersReference[addend1] + primeNumbersReference[addend2] 
+							  + primeNumbersReference[addend3] == llabs(inputNumbersReference[inputNumbersIndex])) {
+						    	if (inputNumbersReference[inputNumbersIndex] < 0){
+									addends[addendsIndex] = primeNumbersReference[addend1];
+							  		addends[addendsIndex+1] = primeNumbersReference[addend2];
+							  		addends[addendsIndex+2] = primeNumbersReference[addend3];
+							  		addendsIndex += 3;
+							  
+							  		// reallocation of memory.
+    								if (addendsIndex%9 == 0){
+	  									addends = (int64_t*) realloc(addends, (addendsIndex * 9) * sizeof(int64_t));
+									}
+						  		}
+						    	sumsCount++;
+						  	}
 						}
 					}
 				}
 			}
-			printf(" sums : ");
-			printf("%d", sumsCount);
-			printf(" : ");
-			addendsIndex = 0;
-			while (addends[addendsIndex] != 0){
-				if (addendsIndex > 0){
-					printf(", ");
+			// printing.
+			printf(" %d", sumsCount);
+			printf(" sums");
+			if (inputNumbersReference[inputNumbersIndex] < 0){
+				printf(" : ");
+				addendsIndex = 0;
+				while (addends[addendsIndex] != 0){
+					if (addendsIndex > 0){
+						printf(", ");
+					}
+			  	printf("%ld", addends[addendsIndex]);
+			  	printf(" + ");
+			  	printf("%ld", addends[addendsIndex+1]);
+			  	printf(" + ");
+			  	printf("%ld", addends[addendsIndex+2]);
+			  	addendsIndex += 3;
 				}
-			  printf("%ld", addends[addendsIndex]);
-			  printf(" + ");
-			  printf("%ld", addends[addendsIndex+1]);
-			  printf(" + ");
-			  printf("%ld", addends[addendsIndex+2]);
-			  addendsIndex += 3;
 			}
 			printf("\n");	
 		}
@@ -229,30 +233,18 @@ void goldbachConjecture(int64_t** inputNumbers, int64_t** primeNumbers, int inpu
 
 //find largest number in order to call sieveOfEratosthenes
 int64_t getLargestNumber(int64_t** inputNumbers, int** inputNumbersSize) {
-  int64_t largestInputNumber = 0;
-  int64_t* inputNumbersReference = *inputNumbers;
-  //int* inputNumbersSizeReference = *inputNumbersSize;
-  for (int index = 0; index < (int)*inputNumbersSize; index++) {
+  	int64_t largestInputNumber = 0;
+  	int64_t* inputNumbersReference = *inputNumbers;
+  	//int* inputNumbersSizeReference = *inputNumbersSize;
+  	for (int index = 0; index < (int)*inputNumbersSize; index++) {
 		//printf("%d\n", *inputNumbersSize);
     
-    if ((llabs(inputNumbersReference[index]) > largestInputNumber)
-      && (inputNumbersReference[index] <= (9223372036854775807))){
-      largestInputNumber = inputNumbersReference[index];
-      //printf("largestSearch:");
-		  //printf("%ld\n", index);
-    }
-    /**
-      if ((llabs(inputNumbersReference[index])) > largestInputNumber){
-			largestInputNumber = inputNumbersReference[index];
-      printf("largestSearch:");
-		  printf("%d\n", index);
-		  printf("largestNumber:");
-		  printf("%ld\n", largestInputNumber);
-		}
-		**/
-  }
-  //printf("exiting for loop\n");
+    	if ((llabs(inputNumbersReference[index]) > largestInputNumber)
+    	&& (llabs(inputNumbersReference[index] <= (9223372036854775807)))){
+      		largestInputNumber = llabs(inputNumbersReference[index]);
+    	}
+  	}
   //free(inputNumbersReference);
-  return largestInputNumber;
+  	return largestInputNumber;
 }
 
