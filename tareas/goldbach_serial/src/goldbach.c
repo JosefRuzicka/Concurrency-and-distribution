@@ -95,10 +95,11 @@ int64_t* getInputNumbers(FILE* input, int** inputNumbersSize) {
  * @brief Returns prime numbers from 2 to n in dynamic memory.
  * @details
  *  @code
- *    int64_t number = 10
- *    int64_t* primeNumbers = sieveOfEratosthenes(number);
+ *    int64_t largestInputNumber = 10
+ *    int64_t* primeNumbers = sieveOfEratosthenes(largestInputNumber);
  *  \endcode
- * @param number: the range to which prime numbers will be calculated.
+ * @param largestInputNumber: the range to which prime numbers will be
+ * calculated.
  */
 int64_t* sieveOfEratosthenes(int64_t largestInputNumber) {
   int64_t* primeNumbers = calloc(largestInputNumber, sizeof(int64_t));
