@@ -21,6 +21,9 @@ int getSize(int64_t** array);
 void goldbachConjecture(int64_t** inputNumbers, int64_t** primeNumbers,
                         int inputNumbersSize, int64_t largestInputNumber);
 
+/**
+ * @brief Calls method to calculate Goldbachs conjecture numbers.
+ */
 int main(void) {
   FILE* input = stdin;
   int inputNumbersSize = 0;
@@ -48,7 +51,18 @@ int main(void) {
   return 0;
 }
 
-// Ask user for numbers and store vthem in dynamic memory.
+/**
+ * @brief Ask user for numbers and returns them stored in dynamic memory.
+ * @details
+ *  @code
+ *    FILE* input = stdin;
+ *    int inputNumbersSize = 0;
+ *    int* inputNumbersSizePtr = &inputNumbersSize;
+ *    int64_t* numbers = getInputNumbers(input, &inputSize);
+ *  \endcode
+ * @param input: The numbers to be calculated as Goldbach sums.
+ * @param inputNumbersSize: The amount of input numbers.
+ */
 int64_t* getInputNumbers(FILE* input, int** inputNumbersSize) {
   int64_t value = 0ll;
   int64_t* inputNumbers = calloc(10, sizeof(int64_t));
@@ -77,7 +91,15 @@ int64_t* getInputNumbers(FILE* input, int** inputNumbersSize) {
   return inputNumbers;
 }
 
-// calculate all prime numbers from 2 to n and store them in dynamic memory.
+/**
+ * @brief Returns prime numbers from 2 to n in dynamic memory.
+ * @details
+ *  @code
+ *    int64_t number = 10
+ *    int64_t* primeNumbers = sieveOfEratosthenes(number);
+ *  \endcode
+ * @param number: the range to which prime numbers will be calculated.
+ */
 int64_t* sieveOfEratosthenes(int64_t largestInputNumber) {
   int64_t* primeNumbers = calloc(largestInputNumber, sizeof(int64_t));
   int64_t* primeNumbersTemp = calloc(largestInputNumber, sizeof(int64_t));
@@ -124,7 +146,22 @@ int64_t* sieveOfEratosthenes(int64_t largestInputNumber) {
   return primeNumbersTemp;
 }
 
-// goldbachs conjecture code.
+/**
+ * @brief prints the goldbach sums that add up to the input numbers.
+ * @details
+ *  @code
+ *    FILE* input = stdin;
+ *    int inputNumbersSize = 10;
+ *    int largestInputNumber = 10;
+ *    int64_t* primeNumbers = {2, 3, 5, 7}
+ *    void goldbachConjecture(&inputNumbers, &primeNumbers, inputNumbersSize,
+ *                            largestInputNumber);
+ *  \endcode
+ * @param inputNumbers: The numbers to be calculated as Goldbach sums..
+ * @param primeNumbers: The prime numbers.
+ * @param inputNumbersSize: The amount of inputNumbers.
+ * @param largestInputNumber: The largest input number.
+ */
 void goldbachConjecture(int64_t** inputNumbers, int64_t** primeNumbers,
                         int inputNumbersSize, int64_t largestInputNumber) {
   int64_t* inputNumbersReference = *inputNumbers;
@@ -249,7 +286,18 @@ void goldbachConjecture(int64_t** inputNumbers, int64_t** primeNumbers,
   }
 }
 
-// find largest number in order to call sieveOfEratosthenes
+/**
+ * @brief Returns largest number from an array.
+ * @details
+ *  @code
+ *    int64_t* inputNumbers = {1, 2, 3, 4, 5};
+ *    int inputNumbersSize = 5;
+ *    int64_t* largestNumber = getLargestNumber(&inputNumbers,
+ *                                              &inputNumbersSize);
+ *  \endcode
+ * @param inputNumbers: The number array.
+ * @param inputNumbersSize: The size of the array.
+ */
 int64_t getLargestNumber(int64_t** inputNumbers, int** inputNumbersSize) {
   int64_t largestInputNumber = 0;
   int64_t* inputNumbersReference = *inputNumbers;
