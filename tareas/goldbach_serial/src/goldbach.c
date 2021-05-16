@@ -166,6 +166,7 @@ void goldbachConjecture(int64_t** inputNumbers, int64_t** primeNumbers,
   int64_t* primeNumbersReference = *primeNumbers;
   int sumsCount = 0;
   int addendsIndex = 0;
+  int addendsCount = 0;
   int64_t modulo = 0;
   // int64_t* addends = calloc(10, sizeof(int64_t));
   // go through every input number.
@@ -216,8 +217,9 @@ void goldbachConjecture(int64_t** inputNumbers, int64_t** primeNumbers,
       printf(" sums");
       if (inputNumbersReference[inputNumbersIndex] < 0) {
         printf(": ");
+        addendsCount = addendsIndex;
         addendsIndex = 0;
-        while (addends[addendsIndex] != 0) {
+        while (addendsIndex < addendsCount) {
           if (addendsIndex > 0) {
             printf(", ");
           }
@@ -268,8 +270,9 @@ void goldbachConjecture(int64_t** inputNumbers, int64_t** primeNumbers,
       printf(" sums");
       if (inputNumbersReference[inputNumbersIndex] < 0) {
         printf(" : ");
+        addendsCount = addendsIndex;
         addendsIndex = 0;
-        while (addends[addendsIndex] != 0) {
+        while (addendsIndex < addendsCount) {
           if (addendsIndex > 0) {
             printf(", ");
           }
@@ -285,6 +288,7 @@ void goldbachConjecture(int64_t** inputNumbers, int64_t** primeNumbers,
     }
     free(addends);
   }
+  // free(addends);
 }
 
 /**
