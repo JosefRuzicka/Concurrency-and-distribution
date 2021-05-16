@@ -52,7 +52,7 @@ lint:
 
 .PHONY: memcheck
 memcheck:
-	valgrind --tool=memcheck bin/$(APPNAME) $(APPARGS)
+	valgrind --tool=memcheck --track-origins=yes --leak-check=full bin/$(APPNAME) $(APPARGS)
 
 .PHONY: helgrind
 helgrind:

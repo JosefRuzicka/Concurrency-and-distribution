@@ -14,10 +14,10 @@
 
 // void* run(void* data);
 // Method declaration:
-int64_t* getInputNumbers(FILE* file, int** inputNumbersSize);
-int64_t getLargestNumber(int64_t** inputNumbers, int** inputNumbersSize);
+int64_t* getInputNumbers(FILE* file, int* inputNumbersSize);
+int64_t getLargestNumber(int64_t** inputNumbers, int* inputNumbersSize);
 int64_t* sieveOfEratosthenes(int64_t largestInputNumber);
-int getSize(int64_t** array);
+int getSize(int64_t* array);
 void goldbachConjecture(int64_t** inputNumbers, int64_t** primeNumbers,
                         int inputNumbersSize, int64_t largestInputNumber);
 
@@ -27,7 +27,6 @@ void goldbachConjecture(int64_t** inputNumbers, int64_t** primeNumbers,
 int main(void) {
   FILE* input = stdin;
   int inputNumbersSize = 0;
-  int* inputNumbersSizePtr = &inputNumbersSize;
 
   // ask user for numbers.
   int64_t* inputNumbers = getInputNumbers(input, &inputNumbersSize);
@@ -46,8 +45,6 @@ int main(void) {
   // deallocation of memory.
   free(inputNumbers);
   free(primeNumbers);
-  free(inputNumbersSizePtr);
-  free(input);
   return 0;
 }
 
@@ -63,11 +60,11 @@ int main(void) {
  * @param input: The numbers to be calculated as Goldbach sums.
  * @param inputNumbersSize: The amount of input numbers.
  */
-int64_t* getInputNumbers(FILE* input, int** inputNumbersSize) {
+int64_t* getInputNumbers(FILE* input, int* inputNumbersSize) {
   int64_t value = 0ll;
   int64_t* inputNumbers = calloc(10, sizeof(int64_t));
   int inputNumbersIndex = 0;
-  int* inputNumbersSizeReference = *inputNumbersSize;
+  int* inputNumbersSizeReference = inputNumbersSize;
   printf("Enter numbers to test\n");
 
   // user inputs numbers until ctrl+D is pressed.
@@ -84,9 +81,9 @@ int64_t* getInputNumbers(FILE* input, int** inputNumbersSize) {
     // input number is added to the array.
     inputNumbers[inputNumbersIndex] = value;
     inputNumbersIndex++;
-    inputNumbersSizeReference = inputNumbersIndex;
+    inputNumbersSizeReference = &inputNumbersIndex;
   }
-  *inputNumbersSize = inputNumbersSizeReference;
+  *inputNumbersSize = *inputNumbersSizeReference;
   // free(inputNumbersSizeReference);
   return inputNumbers;
 }
@@ -102,8 +99,8 @@ int64_t* getInputNumbers(FILE* input, int** inputNumbersSize) {
  * calculated.
  */
 int64_t* sieveOfEratosthenes(int64_t largestInputNumber) {
-  int64_t* primeNumbers = calloc(largestInputNumber, sizeof(int64_t));
-  int64_t* primeNumbersTemp = calloc(largestInputNumber, sizeof(int64_t));
+  int64_t* primeNumbers = calloc(largestInputNumber + 1, sizeof(int64_t));
+  int64_t* primeNumbersTemp = calloc(largestInputNumber + 1, sizeof(int64_t));
 
   int primeNumbersIndex = 0;
   int64_t primeNumbersCount = 0;
@@ -168,12 +165,15 @@ void goldbachConjecture(int64_t** inputNumbers, int64_t** primeNumbers,
   int64_t* inputNumbersReference = *inputNumbers;
   int64_t* primeNumbersReference = *primeNumbers;
   int sumsCount = 0;
+  int addendsIndex = 0;
   int64_t modulo = 0;
+  // int64_t* addends = calloc(10, sizeof(int64_t));
   // go through every input number.
   for (int64_t inputNumbersIndex = 0; inputNumbersIndex < inputNumbersSize;
        inputNumbersIndex++) {
     int64_t* addends = calloc(10, sizeof(int64_t));
-    int addendsIndex = 0;
+    // addends = calloc(10, sizeof(int64_t));
+    addendsIndex = 0;
     printf("%ld:", (inputNumbersReference[inputNumbersIndex]));
     sumsCount = 0;
     modulo = (llabs(inputNumbersReference[inputNumbersIndex]) % 2);
@@ -299,7 +299,7 @@ void goldbachConjecture(int64_t** inputNumbers, int64_t** primeNumbers,
  * @param inputNumbers: The number array.
  * @param inputNumbersSize: The size of the array.
  */
-int64_t getLargestNumber(int64_t** inputNumbers, int** inputNumbersSize) {
+int64_t getLargestNumber(int64_t** inputNumbers, int* inputNumbersSize) {
   int64_t largestInputNumber = 0;
   int64_t* inputNumbersReference = *inputNumbers;
   // int* inputNumbersSizeReference = *inputNumbersSize;
