@@ -10,6 +10,7 @@
 
 #include "array_int64_t.h"
 #include "goldbach.h"
+#include "input_output.h"
 
 /**
  * @brief Main method to calculate Goldbachs conjecture numbers.

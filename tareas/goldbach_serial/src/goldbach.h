@@ -1,5 +1,5 @@
 // Copyright 2021 Josef Ruzicka <josef.ruzicka@ucr.ac.cr> CC-BY-4
-// Outputs the prime numbers that sum the user-given numbers.
+// Calculates the goldbach Sums of the user-input numbers.
 // 17/5/2021
 
 #ifndef GOLDBACH_H
@@ -14,21 +14,6 @@
 // #include <unistd.h>
 
 // Method declaration:
-
-/**
- * @brief Ask user for numbers and stores them in dynamic memory.
- * @details
- *  @code
- *    FILE* input = stdin;
- *    array_int64_t_t inputNumbers;
- * array_int64_t_init(&inputNumbers);
- *    int64_t* numbers = getInputNumbers(input, &inputNumbers);
- *  \endcode
- * @param input: The numbers to be calculated as Goldbach sums.
- * @param inputNumbersS: The array of int_64_t on which the input numbers will
- * be stored.
- */
-int getInputNumbers(FILE* file, array_int64_t_t* inputNumbers);
 
 /**
  * @brief Returns largest number from an array.
@@ -58,7 +43,7 @@ int sieveOfEratosthenes(array_int64_t_t* primeNumbers,
                         int64_t largestInputNumber);
 
 /**
- * @brief prints the goldbach sums that add up to the input numbers.
+ * @brief calculates the goldbach sums that add up to the input numbers.
  * @details
  *  @code
  *    int64_t* inputNumbers = {5, 8, -7, 6};
@@ -70,5 +55,69 @@ int sieveOfEratosthenes(array_int64_t_t* primeNumbers,
  */
 int goldbachConjecture(array_int64_t_t* inputNumbers,
                        array_int64_t_t* primeNumbers);
+
+/**
+ * @brief Calculates Goldbach's strong conjecture sums.
+ * @details
+ *  @code
+ *    array_int64_t_t inputNumbers;
+ *    array_int64_t_init(&inputNumbers);
+ *    array_int64_t_t addends;
+ *    array_int64_t_init(&addends);
+ *    int sumsCount = 2;
+ *    int addendsCount = 4;
+ *    int addendsIndex = 0;
+ *    int inputNumbersIndex;
+ *    goldbachStrongConjecture(array_int64_t_t* addends,
+ *                                array_int64_t_t* inputNumbers, int sumsCount,
+ *                                int addendsIndex, int addendsCount,
+ *                                int inputNumbersIndex);
+ *  \endcode
+ * @param addends: The array of int_64_t that will contain the addends to sum
+ * the numbers in question.
+ * @param inputNumbers: The array of int_64_t that contains the numbers in
+ * question.
+ * @param sumsCount: The counter to the amount of sums to be printed.
+ * @param addendsIndex: The position tracking of the addends in addends.
+ * @param addendsCount: The counter to the amount of addends to be printed.
+ * @param inputNumbersIndex: The position tracking of the addend to be printed
+ * in addends.
+ */
+int goldbachStrongConjecture(array_int64_t_t* inputNumbers,
+                             array_int64_t_t* primeNumbers,
+                             array_int64_t_t* addends, int inputNumbersIndex,
+                             int addendsIndex, int sumsCount, int addendsCount);
+
+/**
+ * @brief Calculates Goldbach's weak conjecture sums.
+ * @details
+ *  @code
+ *    array_int64_t_t inputNumbers;
+ *    array_int64_t_init(&inputNumbers);
+ *    array_int64_t_t addends;
+ *    array_int64_t_init(&addends);
+ *    int sumsCount = 2;
+ *    int addendsCount = 4;
+ *    int addendsIndex = 0;
+ *    int inputNumbersIndex;
+ *    goldbachWeakConjecture(array_int64_t_t* addends,
+ *                                array_int64_t_t* inputNumbers, int sumsCount,
+ *                                int addendsIndex, int addendsCount,
+ *                                int inputNumbersIndex);
+ *  \endcode
+ * @param addends: The array of int_64_t that will contain the addends to sum
+ * the numbers in question.
+ * @param inputNumbers: The array of int_64_t that contains the numbers in
+ * question.
+ * @param sumsCount: The counter to the amount of sums to be printed.
+ * @param addendsIndex: The position tracking of the addends in addends.
+ * @param addendsCount: The counter to the amount of addends to be printed.
+ * @param inputNumbersIndex: The position tracking of the addend to be printed
+ * in addends.
+ */
+int goldbachWeakConjecture(array_int64_t_t* inputNumbers,
+                           array_int64_t_t* primeNumbers,
+                           array_int64_t_t* addends, int inputNumbersIndex,
+                           int addendsIndex, int sumsCount, int addendsCount);
 
 #endif  // GOLDBACH_H

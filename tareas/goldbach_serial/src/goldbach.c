@@ -1,11 +1,12 @@
 // Copyright 2021 Josef Ruzicka <josef.ruzicka@ucr.ac.cr> CC-BY-4
-// Outputs the prime numbers that sum the user-given numbers.
+// Calculates the goldbach Sums of the user-input numbers.
 // 17/5/2021
 
 // #include <errno.h>
 // #include <pthread.h>
 #include "goldbach.h"
 
+#include <assert.h>
 #include <math.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -14,51 +15,10 @@
 #include <string.h>
 
 #include "array_int64_t.h"
+#include "input_output.h"
 // #include <unistd.h>
 
-/**
- * @brief Ask user for numbers and stores them in dynamic memory.
- * @details
- *  @code
- *    FILE* input = stdin;
- *    array_int64_t_t inputNumbers;
- * array_int64_t_init(&inputNumbers);
- *    int64_t* numbers = getInputNumbers(input, &inputNumbers);
- *  \endcode
- * @param input: The numbers to be calculated as Goldbach sums.
- * @param inputNumbersS: The array of int_64_t on which the input numbers will
- * be stored.
- */
-int getInputNumbers(FILE* input, array_int64_t_t* inputNumbers) {
-  int64_t value = 0ll;
-  printf("Enter numbers to test\n");
-
-  // user inputs numbers until ctrl+D is pressed.
-  // the following code is based on the code shown at
-  // http://jeisson.ecci.ucr.ac.cr/concurrente/2020c/lecciones/0118/
-  // good_programming_practices.mp4, by Jeisson Hidalgo-Cespedes
-  while (fscanf(input, "%ld", &value) == 1) {
-    // input number is added to the array.
-    if (array_int64_t_append(inputNumbers, value) == EXIT_FAILURE) {
-      return EXIT_FAILURE;
-    }
-  }
-  return EXIT_SUCCESS;
-}
-
-/**
- * @brief stores prime numbers from 2 to n in dynamic memory.
- * @details
- *  @code
- *    array_int64_t_t primeNumbers;
- *    array_int64_t_init(&primeNumbers);
- *    int64_t largestInputNumber = 10
- *    sieveOfEratosthenes(&primeNumbers, largestInputNumber);
- *  \endcode
- * @param primeNumbers: array of int64_t on which prime numbers will be stored.
- * @param largestInputNumber: the range to which prime numbers will be
- * calculated.
- */
+// stores prime numbers from 2 to n in dynamic memory.
 int sieveOfEratosthenes(array_int64_t_t* primeNumbers,
                         int64_t largestInputNumber) {
   // this array will hold the prime numbers at their index and 0s at the indexes
@@ -118,17 +78,7 @@ int sieveOfEratosthenes(array_int64_t_t* primeNumbers,
   return EXIT_SUCCESS;
 }
 
-/**
- * @brief prints the goldbach sums that add up to the input numbers.
- * @details
- *  @code
- *    int64_t* inputNumbers = {5, 8, -7, 6};
- *    int64_t* primeNumbers = {2, 3, 5, 7};
- *    void goldbachConjecture(&inputNumbers, &primeNumbers);
- *  \endcode
- * @param inputNumbers: The numbers to be calculated as Goldbach sums..
- * @param primeNumbers: The prime numbers.
- */
+// prints the goldbach sums that add up to the input numbers.
 int goldbachConjecture(array_int64_t_t* inputNumbers,
                        array_int64_t_t* primeNumbers) {
   int sumsCount = 0;
@@ -153,102 +103,14 @@ int goldbachConjecture(array_int64_t_t* inputNumbers,
 
         // Goldbachs Strong Conjecture
       } else if (modulo == 0) {
-        // calculate every possible prime sum to find the goldbachs
-        // combinations
-        for (int64_t addend1 = 0; addend1 < (int)primeNumbers->count;
-             addend1++) {
-          for (int64_t addend2 = addend1; addend2 < (int)primeNumbers->count;
-               addend2++) {
-            // check if the sum of addends is equal to the inputNumber.
-            if (primeNumbers->elements[addend1] != 0 &&
-                primeNumbers->elements[addend2] != 0) {
-              if ((primeNumbers->elements[addend1] +
-                   primeNumbers->elements[addend2]) ==
-                  llabs(inputNumbers->elements[inputNumbersIndex])) {
-                if (inputNumbers->elements[inputNumbersIndex] < 0) {
-                  array_int64_t_append(&addends,
-                                       primeNumbers->elements[addend1]);
-                  array_int64_t_append(&addends,
-                                       primeNumbers->elements[addend2]);
-                  addendsIndex += 2;
-                }
-                sumsCount++;
-              }
-            }
-          }
-        }
-        // printing.
-        printf(" %d", sumsCount);
-        printf(" sums");
-        if (inputNumbers->elements[inputNumbersIndex] < 0) {
-          printf(": ");
-          addendsCount = addendsIndex;
-          addendsIndex = 0;
-          while (addendsIndex < addendsCount) {
-            if (addendsIndex > 0) {
-              printf(", ");
-            }
-            printf("%ld", addends.elements[addendsIndex]);
-            printf(" + ");
-            printf("%ld", addends.elements[addendsIndex + 1]);
-            addendsIndex += 2;
-          }
-        }
-        printf("\n");
-
+        goldbachStrongConjecture(inputNumbers, primeNumbers, &addends,
+                                 inputNumbersIndex, addendsIndex, sumsCount,
+                                 addendsCount);
         // Goldbachs Weak Conjecture
       } else {
-        // calculate every possible prime sum to find the goldbachs
-        // combinations
-        for (int64_t addend1 = 0; addend1 < (int)primeNumbers->count;
-             addend1++) {
-          for (int64_t addend2 = addend1; addend2 < (int)primeNumbers->count;
-               addend2++) {
-            for (int64_t addend3 = addend2; addend3 < (int)primeNumbers->count;
-                 addend3++) {
-              // check if the sum of addends is equal to the inputNumber.
-              if (primeNumbers->elements[addend1] != 0 &&
-                  primeNumbers->elements[addend2] != 0 &&
-                  primeNumbers->elements[addend3] != 0) {
-                if (primeNumbers->elements[addend1] +
-                        primeNumbers->elements[addend2] +
-                        primeNumbers->elements[addend3] ==
-                    llabs(inputNumbers->elements[inputNumbersIndex])) {
-                  if (inputNumbers->elements[inputNumbersIndex] < 0) {
-                    array_int64_t_append(&addends,
-                                         primeNumbers->elements[addend1]);
-                    array_int64_t_append(&addends,
-                                         primeNumbers->elements[addend2]);
-                    array_int64_t_append(&addends,
-                                         primeNumbers->elements[addend3]);
-                    addendsIndex += 3;
-                  }
-                  sumsCount++;
-                }
-              }
-            }
-          }
-        }
-        // printing.
-        printf(" %d", sumsCount);
-        printf(" sums");
-        if (inputNumbers->elements[inputNumbersIndex] < 0) {
-          printf(" : ");
-          addendsCount = addendsIndex;
-          addendsIndex = 0;
-          while (addendsIndex < addendsCount) {
-            if (addendsIndex > 0) {
-              printf(", ");
-            }
-            printf("%ld", addends.elements[addendsIndex]);
-            printf(" + ");
-            printf("%ld", addends.elements[addendsIndex + 1]);
-            printf(" + ");
-            printf("%ld", addends.elements[addendsIndex + 2]);
-            addendsIndex += 3;
-          }
-        }
-        printf("\n");
+        goldbachWeakConjecture(inputNumbers, primeNumbers, &addends,
+                               inputNumbersIndex, addendsIndex, sumsCount,
+                               addendsCount);
       }
       array_int64_t_destroy(&addends);
     }
@@ -258,15 +120,7 @@ int goldbachConjecture(array_int64_t_t* inputNumbers,
   return EXIT_SUCCESS;
 }
 
-/**
- * @brief Returns largest number from an array.
- * @details
- *  @code
- *    int64_t* inputNumbers = {1, 2, 3, 4, 5};
- *    int64_t* largestNumber = getLargestNumber(&inputNumbers);
- *  \endcode
- * @param inputNumbers: The number array of int64_t.
- */
+// Returns largest number from an array.
 int64_t getLargestNumber(array_int64_t_t* inputNumbers) {
   int64_t largestInputNumber = 0;
   for (int index = 0; index < (int)inputNumbers->count; index++) {
@@ -276,4 +130,85 @@ int64_t getLargestNumber(array_int64_t_t* inputNumbers) {
     }
   }
   return largestInputNumber;
+}
+
+// Calculates Goldbachs's strong conjecture sums
+int goldbachStrongConjecture(array_int64_t_t* inputNumbers,
+                             array_int64_t_t* primeNumbers,
+                             array_int64_t_t* addends, int inputNumbersIndex,
+                             int addendsIndex, int sumsCount,
+                             int addendsCount) {
+  // calculate every possible prime sum to find the goldbachs
+  // combinations
+  assert(inputNumbers);
+  assert(primeNumbers);
+  assert(addends);
+  for (int64_t addend1 = 0; addend1 < (int)primeNumbers->count; addend1++) {
+    for (int64_t addend2 = addend1; addend2 < (int)primeNumbers->count;
+         addend2++) {
+      // check if the sum of addends is equal to the inputNumber.
+      if (primeNumbers->elements[addend1] != 0 &&
+          primeNumbers->elements[addend2] != 0) {
+        if ((primeNumbers->elements[addend1] +
+             primeNumbers->elements[addend2]) ==
+            llabs(inputNumbers->elements[inputNumbersIndex])) {
+          if (inputNumbers->elements[inputNumbersIndex] < 0) {
+            array_int64_t_append(addends, primeNumbers->elements[addend1]);
+            array_int64_t_append(addends, primeNumbers->elements[addend2]);
+            addendsIndex += 2;
+          }
+          sumsCount++;
+        }
+      }
+    }
+  }
+  // printing.
+  if (printGoldbachStrongConjecture(addends, inputNumbers, sumsCount,
+                                    addendsIndex, addendsCount,
+                                    inputNumbersIndex) == EXIT_FAILURE) {
+    return EXIT_FAILURE;
+  }
+
+  return EXIT_SUCCESS;
+}
+
+// Calculates Goldbachs's weak conjecture sums
+int goldbachWeakConjecture(array_int64_t_t* inputNumbers,
+                           array_int64_t_t* primeNumbers,
+                           array_int64_t_t* addends, int inputNumbersIndex,
+                           int addendsIndex, int sumsCount, int addendsCount) {
+  // calculate every possible prime sum to find the goldbachs
+  // combinations
+  for (int64_t addend1 = 0; addend1 < (int)primeNumbers->count; addend1++) {
+    for (int64_t addend2 = addend1; addend2 < (int)primeNumbers->count;
+         addend2++) {
+      for (int64_t addend3 = addend2; addend3 < (int)primeNumbers->count;
+           addend3++) {
+        // check if the sum of addends is equal to the inputNumber.
+        if (primeNumbers->elements[addend1] != 0 &&
+            primeNumbers->elements[addend2] != 0 &&
+            primeNumbers->elements[addend3] != 0) {
+          if (primeNumbers->elements[addend1] +
+                  primeNumbers->elements[addend2] +
+                  primeNumbers->elements[addend3] ==
+              llabs(inputNumbers->elements[inputNumbersIndex])) {
+            if (inputNumbers->elements[inputNumbersIndex] < 0) {
+              array_int64_t_append(addends, primeNumbers->elements[addend1]);
+              array_int64_t_append(addends, primeNumbers->elements[addend2]);
+              array_int64_t_append(addends, primeNumbers->elements[addend3]);
+              addendsIndex += 3;
+            }
+            sumsCount++;
+          }
+        }
+      }
+    }
+  }
+  // printing.
+  if (printGoldbachWeakConjecture(addends, inputNumbers, sumsCount,
+                                  addendsIndex, addendsCount,
+                                  inputNumbersIndex) == EXIT_FAILURE) {
+    return EXIT_FAILURE;
+  }
+  return EXIT_SUCCESS;
 }
