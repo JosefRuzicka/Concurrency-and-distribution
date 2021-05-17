@@ -1,9 +1,11 @@
 // Copyright 2021 Josef Ruzicka <josef.ruzicka@ucr.ac.cr> CC-BY-4
 // Outputs the prime numbers that sum the user-given numbers.
-// 8/5/2021
+// 17/5/2021
 
 // #include <errno.h>
 // #include <pthread.h>
+#include "goldbach.h"
+
 #include <math.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -13,43 +15,6 @@
 
 #include "array_int64_t.h"
 // #include <unistd.h>
-
-// Method declaration:
-int getInputNumbers(FILE* file, array_int64_t_t* inputNumbers);
-int64_t getLargestNumber(array_int64_t_t* inputNumbers);
-int sieveOfEratosthenes(array_int64_t_t* primeNumbers,
-                        int64_t largestInputNumber);
-int getSize(array_int64_t_t array);
-int goldbachConjecture(array_int64_t_t* inputNumbers,
-                       array_int64_t_t* primeNumbers);
-
-/**
- * @brief Calls method to calculate Goldbachs conjecture numbers.
- */
-int main(void) {
-  FILE* input = stdin;
-
-  // ask user for numbers.
-  array_int64_t_t inputNumbers;
-  array_int64_t_init(&inputNumbers);
-  getInputNumbers(input, &inputNumbers);
-
-  // get the largest number from input
-  int64_t largestInputNumber = getLargestNumber(&inputNumbers);
-
-  // get the prime numbers with sieve of Eratosthenes.
-  array_int64_t_t primeNumbers;
-  array_int64_t_init(&primeNumbers);
-  sieveOfEratosthenes(&primeNumbers, largestInputNumber);
-
-  // Goldbachs Conjecture.
-  goldbachConjecture(&inputNumbers, &primeNumbers);
-
-  // deallocation of memory.
-  array_int64_t_destroy(&inputNumbers);
-  array_int64_t_destroy(&primeNumbers);
-  return 0;
-}
 
 /**
  * @brief Ask user for numbers and stores them in dynamic memory.

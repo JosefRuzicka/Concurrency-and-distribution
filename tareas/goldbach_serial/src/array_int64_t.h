@@ -2,7 +2,7 @@
 // Handles dynamic arrays of type int64_t.
 // This code was adapted from the dynamic double array programed by
 // Jeisson Hidalgo during a C workshop.
-// 8/5/2021
+// 17/5/2021
 
 #ifndef ARRAY_INT64_T_H
 #define ARRAY_INT64_T_H
