@@ -13,6 +13,7 @@
 
 // Ask user for numbers and stores them in dynamic memory.
 int getInputNumbers(FILE* input, array_int64_t_t* inputNumbers) {
+  assert(inputNumbers);
   int64_t value = 0ll;
   printf("Enter numbers to test\n");
 
@@ -62,6 +63,8 @@ int printGoldbachWeakConjecture(array_int64_t_t* addends,
                                 array_int64_t_t* inputNumbers, int sumsCount,
                                 int addendsIndex, int addendsCount,
                                 int inputNumbersIndex) {
+  assert(addends);
+  assert(inputNumbers);
   // printing.
   printf(" %d", sumsCount);
   printf(" sums");

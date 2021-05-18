@@ -23,6 +23,7 @@ int sieveOfEratosthenes(array_int64_t_t* primeNumbers,
                         int64_t largestInputNumber) {
   // this array will hold the prime numbers at their index and 0s at the indexes
   // of numbers that are not prime. for example: {0, 0, 2, 3, 0, 5, 0, 7}
+  assert(primeNumbers);
   if (primeNumbers) {
     array_int64_t_t primeNumbersTemp;
     array_int64_t_init(&primeNumbersTemp);
@@ -81,6 +82,8 @@ int sieveOfEratosthenes(array_int64_t_t* primeNumbers,
 // prints the goldbach sums that add up to the input numbers.
 int goldbachConjecture(array_int64_t_t* inputNumbers,
                        array_int64_t_t* primeNumbers) {
+  assert(inputNumbers);
+  assert(primeNumbers);
   int sumsCount = 0;
   int addendsIndex = 0;
   int addendsCount = 0;
@@ -123,6 +126,7 @@ int goldbachConjecture(array_int64_t_t* inputNumbers,
 // Returns largest number from an array.
 int64_t getLargestNumber(array_int64_t_t* inputNumbers) {
   int64_t largestInputNumber = 0;
+  assert(inputNumbers);
   for (int index = 0; index < (int)inputNumbers->count; index++) {
     if ((llabs(inputNumbers->elements[index]) > largestInputNumber) &&
         (llabs(inputNumbers->elements[index] <= (9223372036854775807)))) {
@@ -179,6 +183,9 @@ int goldbachWeakConjecture(array_int64_t_t* inputNumbers,
                            int addendsIndex, int sumsCount, int addendsCount) {
   // calculate every possible prime sum to find the goldbachs
   // combinations
+  assert(inputNumbers);
+  assert(primeNumbers);
+  assert(addends);
   for (int64_t addend1 = 0; addend1 < (int)primeNumbers->count; addend1++) {
     for (int64_t addend2 = addend1; addend2 < (int)primeNumbers->count;
          addend2++) {
