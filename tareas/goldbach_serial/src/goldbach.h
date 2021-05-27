@@ -5,15 +5,10 @@
 #ifndef GOLDBACH_H
 #define GOLDBACH_H
 
-// #include <errno.h>
-// #include <pthread.h>
 #include <stdint.h>
 #include <stdio.h>
 
 #include "array_int64_t.h"
-// #include <unistd.h>
-
-// Method declaration:
 
 /**
  * @brief Returns largest number from an array.

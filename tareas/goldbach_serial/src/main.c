@@ -2,8 +2,6 @@
 // Main file for the goldbach Assignment.
 // 17/5/2021
 
-// #include <errno.h>
-// #include <pthread.h>
 #include <math.h>
 #include <stdint.h>
 #include <stdio.h>
