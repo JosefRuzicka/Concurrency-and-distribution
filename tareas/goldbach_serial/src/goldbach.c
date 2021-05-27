@@ -18,6 +18,7 @@
 #include "input_output.h"
 // #include <unistd.h>
 
+/*
 // stores prime numbers from 2 to n in dynamic memory.
 int sieveOfEratosthenes(array_int64_t_t* primeNumbers,
                         int64_t largestInputNumber) {
@@ -29,7 +30,7 @@ int sieveOfEratosthenes(array_int64_t_t* primeNumbers,
     array_int64_t_init(&primeNumbersTemp);
 
     int primeNumbersIndex = 0;
-    int64_t primeNumbersCount = 0;
+    int64_t currentPrimeNumber = 0;
     bool isPrime = true;
 
     // dynamic memory structure initialization.
@@ -38,12 +39,13 @@ int sieveOfEratosthenes(array_int64_t_t* primeNumbers,
     for (primeNumbersIndex = 2; primeNumbersIndex <= largestInputNumber;
          primeNumbersIndex++) {
       array_int64_t_append(&primeNumbersTemp, primeNumbersIndex);
-      primeNumbersCount++;
+      currentPrimeNumber++;
       isPrime = true;
       // sieve.
       // https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes
       // Adapted from
-      // https://technotip.com/7469/c-program-to-find-prime-numbers-from-1-to-300-using-for-loop/
+      //
+https://technotip.com/7469/c-program-to-find-prime-numbers-from-1-to-300-using-for-loop/
       for (int dividend = 2;
            dividend <= sqrtl(primeNumbersTemp.elements[primeNumbersIndex]);
            dividend++) {
@@ -58,7 +60,7 @@ int sieveOfEratosthenes(array_int64_t_t* primeNumbers,
     nextIteration:
       if (!isPrime) {
         primeNumbersTemp.elements[primeNumbersIndex] = 0;
-        primeNumbersCount--;
+        currentPrimeNumber--;
       }
     }
 
@@ -73,6 +75,41 @@ int sieveOfEratosthenes(array_int64_t_t* primeNumbers,
       }
     }
     array_int64_t_destroy(&primeNumbersTemp);
+  } else {
+    return EXIT_FAILURE;
+  }
+  return EXIT_SUCCESS;
+}
+*/
+
+// stores prime numbers from 2 to n in dynamic memory.
+int sieveOfEratosthenes(array_int64_t_t* primeNumbers,
+                        int64_t largestInputNumber) {
+  assert(primeNumbers);
+  if (primeNumbers) {
+    bool isPrime = true;
+    // Fill array with primes from 2 to largestInputNumber
+    for (int64_t currentPrimeNumber = 2;
+         currentPrimeNumber <= largestInputNumber; currentPrimeNumber++) {
+      isPrime = true;
+      // sieve.
+      // https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes
+      // Adapted from
+      // https://technotip.com/7469/c-program-to-find-prime-numbers-from-1-to-300-using-for-loop/
+      for (int dividend = 2; dividend <= sqrtl(currentPrimeNumber);
+           dividend++) {
+        if ((currentPrimeNumber % dividend == 0) &&
+            (currentPrimeNumber != dividend)) {
+          isPrime = false;
+          goto nextIteration;
+        }
+      }
+    nextIteration:
+      // if the number is prime. add it to the array.
+      if (isPrime) {
+        array_int64_t_append(primeNumbers, currentPrimeNumber);
+      }
+    }
   } else {
     return EXIT_FAILURE;
   }
