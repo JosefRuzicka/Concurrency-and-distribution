@@ -110,32 +110,6 @@ int main(int argc, char* argv[]) {
 // unlock
 // (calcular goldbach(private->position))
 // -----------------------------------
-/*
-int main_program() {
-  FILE* input = stdin;
-
-  // ask user for numbers.
-  array_int64_t_t inputNumbers;
-  array_int64_t_init(&inputNumbers);
-  getInputNumbers(input, &inputNumbers);
-
-  // get the largest number from input
-  int64_t largestInputNumber = getLargestNumber(&inputNumbers);
-
-  // get the prime numbers with sieve of Eratosthenes.
-  array_int64_t_t primeNumbers;
-  array_int64_t_init(&primeNumbers);
-  sieveOfEratosthenes(&primeNumbers, largestInputNumber);
-
-  // Goldbachs Conjecture.
-  goldbachConjecture(&inputNumbers, &primeNumbers);
-
-  // deallocation of memory.
-  array_int64_t_destroy(&inputNumbers);
-  array_int64_t_destroy(&primeNumbers);
-  return 0;
-}
-*/
 
 // Taken and adapted from the code shown in class by prof. Jeisson Hidalgo &
 // prof. Allan Berrocal
@@ -206,7 +180,7 @@ int create_threads(shared_data_t* shared_data) {
 void* run(void* data) {
   const private_data_t* private_data = (private_data_t*)data;
   shared_data_t* shared_data = private_data->shared_data;
-  const size_t my_thread_id = private_data->thread_number;
+  // const size_t my_thread_id = private_data->thread_number;
   const size_t thread_count = shared_data->thread_count;
   size_t my_position = 0;
 
@@ -221,8 +195,10 @@ void* run(void* data) {
     // printf("inputNumbersCount = %d and my position = %d \n",
     //       shared_data->inputNumbers.count, my_position);
     if (my_position < shared_data->inputNumbers.count) {
-      goldbachConjecture(&shared_data->inputNumbers, &shared_data->primeNumbers,
-                         my_position);
+      goldbachConjecture(
+          &shared_data->inputNumbers, &shared_data->primeNumbers, my_position,
+          &shared_data->can_print[my_position],
+          &shared_data->can_print[(my_position + 1) % thread_count]);
     }
   }
   // sem_wait(&shared_data->can_print[my_thread_id]);

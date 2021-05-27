@@ -3,11 +3,12 @@
 // 17/5/2021
 
 // #include <errno.h>
-// #include <pthread.h>
 #include "goldbach.h"
 
 #include <assert.h>
 #include <math.h>
+#include <pthread.h>
+#include <semaphore.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -54,8 +55,8 @@ int sieveOfEratosthenes(array_int64_t_t* primeNumbers,
 
 // prints the goldbach sums that add up to the input numbers.
 int goldbachConjecture(array_int64_t_t* inputNumbers,
-                       array_int64_t_t* primeNumbers,
-                       size_t inputNumbersIndex) {
+                       array_int64_t_t* primeNumbers, size_t inputNumbersIndex,
+                       sem_t* can_print, sem_t* can_print_next) {
   assert(inputNumbers);
   assert(primeNumbers);
 
@@ -84,12 +85,12 @@ int goldbachConjecture(array_int64_t_t* inputNumbers,
     } else if (modulo == 0) {
       goldbachStrongConjecture(inputNumbers, primeNumbers, &addends,
                                inputNumbersIndex, addendsIndex, sumsCount,
-                               addendsCount);
+                               addendsCount, can_print, can_print_next);
       // Goldbachs Weak Conjecture
     } else {
       goldbachWeakConjecture(inputNumbers, primeNumbers, &addends,
                              inputNumbersIndex, addendsIndex, sumsCount,
-                             addendsCount);
+                             addendsCount, can_print, can_print_next);
     }
     array_int64_t_destroy(&addends);
     //}
@@ -116,8 +117,8 @@ int64_t getLargestNumber(array_int64_t_t* inputNumbers) {
 int goldbachStrongConjecture(array_int64_t_t* inputNumbers,
                              array_int64_t_t* primeNumbers,
                              array_int64_t_t* addends, int inputNumbersIndex,
-                             int addendsIndex, int sumsCount,
-                             int addendsCount) {
+                             int addendsIndex, int sumsCount, int addendsCount,
+                             sem_t* can_print, sem_t* can_print_next) {
   // calculate every possible prime sum to find the goldbachs
   // combinations
   assert(inputNumbers);
@@ -143,12 +144,13 @@ int goldbachStrongConjecture(array_int64_t_t* inputNumbers,
     }
   }
   // printing.
+  // sem_wait(can_print);
   if (printGoldbachStrongConjecture(addends, inputNumbers, sumsCount,
                                     addendsIndex, addendsCount,
                                     inputNumbersIndex) == EXIT_FAILURE) {
     return EXIT_FAILURE;
   }
-
+  // sem_post(can_print_next);
   return EXIT_SUCCESS;
 }
 
@@ -156,7 +158,8 @@ int goldbachStrongConjecture(array_int64_t_t* inputNumbers,
 int goldbachWeakConjecture(array_int64_t_t* inputNumbers,
                            array_int64_t_t* primeNumbers,
                            array_int64_t_t* addends, int inputNumbersIndex,
-                           int addendsIndex, int sumsCount, int addendsCount) {
+                           int addendsIndex, int sumsCount, int addendsCount,
+                           sem_t* can_print, sem_t* can_print_next) {
   // calculate every possible prime sum to find the goldbachs
   // combinations
   assert(inputNumbers);
@@ -188,10 +191,12 @@ int goldbachWeakConjecture(array_int64_t_t* inputNumbers,
     }
   }
   // printing.
+  // sem_wait(can_print);
   if (printGoldbachWeakConjecture(addends, inputNumbers, sumsCount,
                                   addendsIndex, addendsCount,
                                   inputNumbersIndex) == EXIT_FAILURE) {
     return EXIT_FAILURE;
   }
+  // sem_post(can_print_next);
   return EXIT_SUCCESS;
 }

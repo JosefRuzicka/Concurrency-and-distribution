@@ -6,7 +6,7 @@
 #define GOLDBACH_H
 
 // #include <errno.h>
-// #include <pthread.h>
+#include <semaphore.h>
 #include <stdint.h>
 #include <stdio.h>
 
@@ -54,7 +54,8 @@ int sieveOfEratosthenes(array_int64_t_t* primeNumbers,
  * @param primeNumbers: The prime numbers.
  */
 int goldbachConjecture(array_int64_t_t* inputNumbers,
-                       array_int64_t_t* primeNumbers, size_t inputNumbersIndex);
+                       array_int64_t_t* primeNumbers, size_t inputNumbersIndex,
+                       sem_t* can_print, sem_t* can_print_next);
 
 /**
  * @brief Calculates Goldbach's strong conjecture sums.
@@ -86,7 +87,8 @@ int goldbachConjecture(array_int64_t_t* inputNumbers,
 int goldbachStrongConjecture(array_int64_t_t* inputNumbers,
                              array_int64_t_t* primeNumbers,
                              array_int64_t_t* addends, int inputNumbersIndex,
-                             int addendsIndex, int sumsCount, int addendsCount);
+                             int addendsIndex, int sumsCount, int addendsCount,
+                             sem_t* can_print, sem_t* can_print_next);
 
 /**
  * @brief Calculates Goldbach's weak conjecture sums.
@@ -118,6 +120,7 @@ int goldbachStrongConjecture(array_int64_t_t* inputNumbers,
 int goldbachWeakConjecture(array_int64_t_t* inputNumbers,
                            array_int64_t_t* primeNumbers,
                            array_int64_t_t* addends, int inputNumbersIndex,
-                           int addendsIndex, int sumsCount, int addendsCount);
+                           int addendsIndex, int sumsCount, int addendsCount,
+                           sem_t* can_print, sem_t* can_print_next);
 
 #endif  // GOLDBACH_H
