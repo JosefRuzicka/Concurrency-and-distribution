@@ -54,7 +54,7 @@ int sieveOfEratosthenes(array_int64_t_t* primeNumbers,
  * @param primeNumbers: The prime numbers.
  */
 int goldbachConjecture(array_int64_t_t* inputNumbers,
-                       array_int64_t_t* primeNumbers);
+                       array_int64_t_t* primeNumbers, size_t inputNumbersIndex);
 
 /**
  * @brief Calculates Goldbach's strong conjecture sums.

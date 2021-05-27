@@ -18,70 +18,6 @@
 #include "input_output.h"
 // #include <unistd.h>
 
-/*
-// stores prime numbers from 2 to n in dynamic memory.
-int sieveOfEratosthenes(array_int64_t_t* primeNumbers,
-                        int64_t largestInputNumber) {
-  // this array will hold the prime numbers at their index and 0s at the indexes
-  // of numbers that are not prime. for example: {0, 0, 2, 3, 0, 5, 0, 7}
-  assert(primeNumbers);
-  if (primeNumbers) {
-    array_int64_t_t primeNumbersTemp;
-    array_int64_t_init(&primeNumbersTemp);
-
-    int primeNumbersIndex = 0;
-    int64_t currentPrimeNumber = 0;
-    bool isPrime = true;
-
-    // dynamic memory structure initialization.
-    array_int64_t_append(&primeNumbersTemp, 0);
-    array_int64_t_append(&primeNumbersTemp, 0);
-    for (primeNumbersIndex = 2; primeNumbersIndex <= largestInputNumber;
-         primeNumbersIndex++) {
-      array_int64_t_append(&primeNumbersTemp, primeNumbersIndex);
-      currentPrimeNumber++;
-      isPrime = true;
-      // sieve.
-      // https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes
-      // Adapted from
-      //
-https://technotip.com/7469/c-program-to-find-prime-numbers-from-1-to-300-using-for-loop/
-      for (int dividend = 2;
-           dividend <= sqrtl(primeNumbersTemp.elements[primeNumbersIndex]);
-           dividend++) {
-        if (((llabs(primeNumbersTemp.elements[primeNumbersIndex]) % dividend ==
-              0) &&
-             (llabs(primeNumbersTemp.elements[primeNumbersIndex]) !=
-              dividend))) {
-          isPrime = false;
-          goto nextIteration;
-        }
-      }
-    nextIteration:
-      if (!isPrime) {
-        primeNumbersTemp.elements[primeNumbersIndex] = 0;
-        currentPrimeNumber--;
-      }
-    }
-
-    // dynamic memory reallocation to ignore the 0s.
-    int primeNumbersTempIndex = 0;
-    for (primeNumbersIndex = 2; primeNumbersIndex <= largestInputNumber;
-         primeNumbersIndex++) {
-      if (primeNumbersTemp.elements[primeNumbersIndex] != 0) {
-        array_int64_t_append(primeNumbers,
-                             primeNumbersTemp.elements[primeNumbersIndex]);
-        primeNumbersTempIndex++;
-      }
-    }
-    array_int64_t_destroy(&primeNumbersTemp);
-  } else {
-    return EXIT_FAILURE;
-  }
-  return EXIT_SUCCESS;
-}
-*/
-
 // stores prime numbers from 2 to n in dynamic memory.
 int sieveOfEratosthenes(array_int64_t_t* primeNumbers,
                         int64_t largestInputNumber) {
@@ -118,42 +54,45 @@ int sieveOfEratosthenes(array_int64_t_t* primeNumbers,
 
 // prints the goldbach sums that add up to the input numbers.
 int goldbachConjecture(array_int64_t_t* inputNumbers,
-                       array_int64_t_t* primeNumbers) {
+                       array_int64_t_t* primeNumbers,
+                       size_t inputNumbersIndex) {
   assert(inputNumbers);
   assert(primeNumbers);
+
+  // printf(" en goldbach\n");
   int sumsCount = 0;
   int addendsIndex = 0;
   int addendsCount = 0;
   int64_t modulo = 0;
   // go through every input number.
   if (inputNumbers && primeNumbers) {
-    for (int64_t inputNumbersIndex = 0;
-         inputNumbersIndex < (int)inputNumbers->count; inputNumbersIndex++) {
-      array_int64_t_t addends;
-      array_int64_t_init(&addends);
-      addendsIndex = 0;
-      printf("%ld:", (inputNumbers->elements[inputNumbersIndex]));
-      sumsCount = 0;
-      modulo = (llabs(inputNumbers->elements[inputNumbersIndex]) % 2);
-      // check if number is in range
-      if (llabs(inputNumbers->elements[inputNumbersIndex]) <= 5 ||
-          llabs(inputNumbers->elements[inputNumbersIndex]) >
-              (9223372036854775807)) {
-        printf(" NA\n");
+    // for (int64_t inputNumbersIndex = 0;
+    //   inputNumbersIndex < (int)inputNumbers->count; inputNumbersIndex++) {
+    array_int64_t_t addends;
+    array_int64_t_init(&addends);
+    addendsIndex = 0;
+    printf("%ld:", (inputNumbers->elements[inputNumbersIndex]));
+    sumsCount = 0;
+    modulo = (llabs(inputNumbers->elements[inputNumbersIndex]) % 2);
+    // check if number is in range
+    if (llabs(inputNumbers->elements[inputNumbersIndex]) <= 5 ||
+        llabs(inputNumbers->elements[inputNumbersIndex]) >
+            (9223372036854775807)) {
+      printf(" NA\n");
 
-        // Goldbachs Strong Conjecture
-      } else if (modulo == 0) {
-        goldbachStrongConjecture(inputNumbers, primeNumbers, &addends,
-                                 inputNumbersIndex, addendsIndex, sumsCount,
-                                 addendsCount);
-        // Goldbachs Weak Conjecture
-      } else {
-        goldbachWeakConjecture(inputNumbers, primeNumbers, &addends,
+      // Goldbachs Strong Conjecture
+    } else if (modulo == 0) {
+      goldbachStrongConjecture(inputNumbers, primeNumbers, &addends,
                                inputNumbersIndex, addendsIndex, sumsCount,
                                addendsCount);
-      }
-      array_int64_t_destroy(&addends);
+      // Goldbachs Weak Conjecture
+    } else {
+      goldbachWeakConjecture(inputNumbers, primeNumbers, &addends,
+                             inputNumbersIndex, addendsIndex, sumsCount,
+                             addendsCount);
     }
+    array_int64_t_destroy(&addends);
+    //}
   } else {
     return EXIT_FAILURE;
   }
