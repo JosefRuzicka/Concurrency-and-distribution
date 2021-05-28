@@ -7,6 +7,7 @@
 #include <math.h>
 #include <pthread.h>
 #include <semaphore.h>
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -40,18 +41,6 @@ void* run(void* data);
 int main(int argc, char* argv[]) {
   //-------------- old main ------------
   FILE* input = stdin;
-  // ask user for numbers.
-  // array_int64_t_t inputNumbers;
-  // array_int64_t_init(&inputNumbers);
-  // getInputNumbers(input, &inputNumbers);
-
-  // get the largest number from input
-  // int64_t largestInputNumber = getLargestNumber(&inputNumbers);
-
-  // get the prime numbers with sieve of Eratosthenes.
-  // array_int64_t_t primeNumbers;
-  // array_int64_t_init(&primeNumbers);
-  // sieveOfEratosthenes(&primeNumbers, largestInputNumber);
   //------------------------------------
   // ------------- TAREA 2 -------------
   // ------------ Signaling ------------
@@ -80,7 +69,7 @@ int main(int argc, char* argv[]) {
     }
     if (error == EXIT_SUCCESS) {
       shared_data->can_print =
-          (sem_t*)calloc(shared_data->thread_count, sizeof(sem_t));
+          (sem_t*)calloc(shared_data->inputNumbers.count, sizeof(sem_t));
       if (shared_data->can_print) {
         create_threads(shared_data);
         free(shared_data->can_print);
@@ -97,19 +86,8 @@ int main(int argc, char* argv[]) {
     }
   }
   // ------------- FIN TAREA 2 -------------
-  // deallocation of memory.
-  // array_int64_t_destroy(&inputNumbers);
-  // array_int64_t_destroy(&primeNumbers);
   return error;
 }
-
-// while shared->position = 0 inputNumbers->count
-// lock
-// private->data position = shared->position
-// shared->position++;
-// unlock
-// (calcular goldbach(private->position))
-// -----------------------------------
 
 // Taken and adapted from the code shown in class by prof. Jeisson Hidalgo &
 // prof. Allan Berrocal
@@ -126,35 +104,15 @@ int create_threads(shared_data_t* shared_data) {
     private_data_t* private_data = (private_data_t*)calloc(
         shared_data->thread_count, sizeof(private_data_t));
     if (threads && private_data) {
-      for (size_t index = 0; index < shared_data->thread_count; ++index) {
-        private_data[index].thread_number = index;
-        private_data[index].shared_data = shared_data;
-
-        // error = sem_init(&shared_data->can_print[index], /*pshared*/ 0,
-        //                 /*value*/ !index);
-
-        // if (error == EXIT_SUCCESS) {
-        //  if (pthread_create(&threads[index], /*attr*/ NULL, run,
-        //                     &private_data[index]) == EXIT_SUCCESS) {
-        /*
-        } else {
-          fprintf(stderr, "error: could not create thread %zu\n", index);
-          error = 21;
-          shared_data->thread_count = index;
-          break;
-        }
-      } else {
-        fprintf(stderr, "error: could not init semaphore %zu\n", index);
-        error = 22;
-        shared_data->thread_count = index;
-        break;
-      }
-      */
-      }
       // create semaphores to print the input numbers in order and thread safe
       for (size_t index = 0; index < shared_data->inputNumbers.count; index++) {
         error = sem_init(&shared_data->can_print[index], /*pshared*/ 0,
                          /*value*/ !index);
+      }
+
+      for (size_t index = 0; index < shared_data->thread_count; ++index) {
+        private_data[index].thread_number = index;
+        private_data[index].shared_data = shared_data;
 
         if (error == EXIT_SUCCESS) {
           if (pthread_create(&threads[index], /*attr*/ NULL, run,
@@ -172,11 +130,6 @@ int create_threads(shared_data_t* shared_data) {
           break;
         }
       }
-      // main thread's task
-      //--------------------
-      // printf("Hello from main thread\n");
-
-      //--------------------
 
       for (size_t index = 0; index < shared_data->thread_count; ++index) {
         pthread_join(threads[index], /*value_ptr*/ NULL);
@@ -202,40 +155,27 @@ int create_threads(shared_data_t* shared_data) {
 void* run(void* data) {
   const private_data_t* private_data = (private_data_t*)data;
   shared_data_t* shared_data = private_data->shared_data;
-  const size_t my_thread_id = private_data->thread_number;
-  const size_t thread_count = shared_data->thread_count;
   size_t my_position = 0;
+  bool finished = false;
 
   // Thread's task
   // Cada hilo toma un numero del input para calcular sus sumas.
-  while (shared_data->position < shared_data->inputNumbers.count) {
+  // while (shared_data->position < shared_data->inputNumbers.count) {
+  while (!finished) {
     sem_wait(&shared_data->mutex);
     if (shared_data->position < shared_data->inputNumbers.count) {
       my_position = shared_data->position;
       shared_data->position++;
-      // printf("Hello from thread %zu of %zu\n", my_thread_id, thread_count);
       sem_post(&shared_data->mutex);
-      // printf("inputNumbersCount = %d and my position = %d \n",
-      //       shared_data->inputNumbers.count, my_position);
-      // if (my_position < shared_data->inputNumbers.count) {
-      // sem_wait(&shared_data->can_print[my_position]);
-      // printf("Hello from index %zu of %zu\n", my_position,
-      //       shared_data->inputNumbers.count);
       goldbachConjecture(
           &shared_data->inputNumbers, &shared_data->primeNumbers, my_position,
           &shared_data->can_print[my_position],
           &shared_data->can_print[(my_position + 1) %
                                   shared_data->inputNumbers.count]);
-      // sem_post(&shared_data->can_print[(my_position + 1) %
-      //                                 shared_data->inputNumbers.count]);
-      //}
     } else {
+      finished = true;
       sem_post(&shared_data->mutex);
     }
   }
-  // sem_wait(&shared_data->can_print[my_thread_id]);
-  // printf("Hello from thread %zu of %zu\n", my_thread_id, thread_count);
-  // sem_post(&shared_data->can_print[(my_thread_id + 1) % thread_count]);
-
   return NULL;
 }

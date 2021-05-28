@@ -2,7 +2,6 @@
 // Calculates the goldbach Sums of the user-input numbers.
 // 17/5/2021
 
-// #include <errno.h>
 #include "goldbach.h"
 
 #include <assert.h>
@@ -17,7 +16,6 @@
 
 #include "array_int64_t.h"
 #include "input_output.h"
-// #include <unistd.h>
 
 // stores prime numbers from 2 to n in dynamic memory.
 int sieveOfEratosthenes(array_int64_t_t* primeNumbers,
@@ -60,19 +58,15 @@ int goldbachConjecture(array_int64_t_t* inputNumbers,
   assert(inputNumbers);
   assert(primeNumbers);
 
-  // printf(" en goldbach\n");
   int sumsCount = 0;
   int addendsIndex = 0;
   int addendsCount = 0;
   int64_t modulo = 0;
-  // go through every input number.
+  // calculate input number at the inputNumbersIndex.
   if (inputNumbers && primeNumbers) {
-    // for (int64_t inputNumbersIndex = 0;
-    //   inputNumbersIndex < (int)inputNumbers->count; inputNumbersIndex++) {
     array_int64_t_t addends;
     array_int64_t_init(&addends);
     addendsIndex = 0;
-    // printf("%ld:", (inputNumbers->elements[inputNumbersIndex]));
     sumsCount = 0;
     modulo = (llabs(inputNumbers->elements[inputNumbersIndex]) % 2);
     // check if number is in range
@@ -80,8 +74,6 @@ int goldbachConjecture(array_int64_t_t* inputNumbers,
         llabs(inputNumbers->elements[inputNumbersIndex]) >
             (9223372036854775807)) {
       sem_wait(can_print);
-      // printf("%ld:", (inputNumbers->elements[inputNumbersIndex]));
-      // printf(" NA\n");
       printOutOfRange(inputNumbers, inputNumbersIndex);
       sem_post(can_print_next);
 
@@ -97,7 +89,6 @@ int goldbachConjecture(array_int64_t_t* inputNumbers,
                              addendsCount, can_print, can_print_next);
     }
     array_int64_t_destroy(&addends);
-    //}
   } else {
     return EXIT_FAILURE;
   }
@@ -155,7 +146,6 @@ int goldbachStrongConjecture(array_int64_t_t* inputNumbers,
     return EXIT_FAILURE;
   }
   sem_post(can_print_next);
-  // sem_wait(&can_print);
   return EXIT_SUCCESS;
 }
 
@@ -203,6 +193,5 @@ int goldbachWeakConjecture(array_int64_t_t* inputNumbers,
     return EXIT_FAILURE;
   }
   sem_post(can_print_next);
-  // sem_post(&can_print);
   return EXIT_SUCCESS;
 }
