@@ -94,4 +94,6 @@ int printGoldbachWeakConjecture(array_int64_t_t* addends,
                                 int addendsIndex, int addendsCount,
                                 int inputNumbersIndex);
 
+void printOutOfRange(array_int64_t_t* inputNumbers, int inputNumbersIndex);
+
 #endif  // INPUT_OUTPUT_H

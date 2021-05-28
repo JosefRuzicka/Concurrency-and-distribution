@@ -130,6 +130,29 @@ int create_threads(shared_data_t* shared_data) {
         private_data[index].thread_number = index;
         private_data[index].shared_data = shared_data;
 
+        // error = sem_init(&shared_data->can_print[index], /*pshared*/ 0,
+        //                 /*value*/ !index);
+
+        // if (error == EXIT_SUCCESS) {
+        //  if (pthread_create(&threads[index], /*attr*/ NULL, run,
+        //                     &private_data[index]) == EXIT_SUCCESS) {
+        /*
+        } else {
+          fprintf(stderr, "error: could not create thread %zu\n", index);
+          error = 21;
+          shared_data->thread_count = index;
+          break;
+        }
+      } else {
+        fprintf(stderr, "error: could not init semaphore %zu\n", index);
+        error = 22;
+        shared_data->thread_count = index;
+        break;
+      }
+      */
+      }
+      // create semaphores to print the input numbers in order and thread safe
+      for (size_t index = 0; index < shared_data->inputNumbers.count; index++) {
         error = sem_init(&shared_data->can_print[index], /*pshared*/ 0,
                          /*value*/ !index);
 
@@ -149,7 +172,6 @@ int create_threads(shared_data_t* shared_data) {
           break;
         }
       }
-
       // main thread's task
       //--------------------
       // printf("Hello from main thread\n");
@@ -180,7 +202,7 @@ int create_threads(shared_data_t* shared_data) {
 void* run(void* data) {
   const private_data_t* private_data = (private_data_t*)data;
   shared_data_t* shared_data = private_data->shared_data;
-  // const size_t my_thread_id = private_data->thread_number;
+  const size_t my_thread_id = private_data->thread_number;
   const size_t thread_count = shared_data->thread_count;
   size_t my_position = 0;
 
@@ -188,17 +210,27 @@ void* run(void* data) {
   // Cada hilo toma un numero del input para calcular sus sumas.
   while (shared_data->position < shared_data->inputNumbers.count) {
     sem_wait(&shared_data->mutex);
-    my_position = shared_data->position;
-    shared_data->position++;
-    // printf("Hello from thread %zu of %zu\n", my_thread_id, thread_count);
-    sem_post(&shared_data->mutex);
-    // printf("inputNumbersCount = %d and my position = %d \n",
-    //       shared_data->inputNumbers.count, my_position);
-    if (my_position < shared_data->inputNumbers.count) {
+    if (shared_data->position < shared_data->inputNumbers.count) {
+      my_position = shared_data->position;
+      shared_data->position++;
+      // printf("Hello from thread %zu of %zu\n", my_thread_id, thread_count);
+      sem_post(&shared_data->mutex);
+      // printf("inputNumbersCount = %d and my position = %d \n",
+      //       shared_data->inputNumbers.count, my_position);
+      // if (my_position < shared_data->inputNumbers.count) {
+      // sem_wait(&shared_data->can_print[my_position]);
+      // printf("Hello from index %zu of %zu\n", my_position,
+      //       shared_data->inputNumbers.count);
       goldbachConjecture(
           &shared_data->inputNumbers, &shared_data->primeNumbers, my_position,
           &shared_data->can_print[my_position],
-          &shared_data->can_print[(my_position + 1) % thread_count]);
+          &shared_data->can_print[(my_position + 1) %
+                                  shared_data->inputNumbers.count]);
+      // sem_post(&shared_data->can_print[(my_position + 1) %
+      //                                 shared_data->inputNumbers.count]);
+      //}
+    } else {
+      sem_post(&shared_data->mutex);
     }
   }
   // sem_wait(&shared_data->can_print[my_thread_id]);

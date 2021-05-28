@@ -72,14 +72,18 @@ int goldbachConjecture(array_int64_t_t* inputNumbers,
     array_int64_t_t addends;
     array_int64_t_init(&addends);
     addendsIndex = 0;
-    printf("%ld:", (inputNumbers->elements[inputNumbersIndex]));
+    // printf("%ld:", (inputNumbers->elements[inputNumbersIndex]));
     sumsCount = 0;
     modulo = (llabs(inputNumbers->elements[inputNumbersIndex]) % 2);
     // check if number is in range
     if (llabs(inputNumbers->elements[inputNumbersIndex]) <= 5 ||
         llabs(inputNumbers->elements[inputNumbersIndex]) >
             (9223372036854775807)) {
-      printf(" NA\n");
+      sem_wait(can_print);
+      // printf("%ld:", (inputNumbers->elements[inputNumbersIndex]));
+      // printf(" NA\n");
+      printOutOfRange(inputNumbers, inputNumbersIndex);
+      sem_post(can_print_next);
 
       // Goldbachs Strong Conjecture
     } else if (modulo == 0) {
@@ -144,13 +148,14 @@ int goldbachStrongConjecture(array_int64_t_t* inputNumbers,
     }
   }
   // printing.
-  // sem_wait(can_print);
+  sem_wait(can_print);
   if (printGoldbachStrongConjecture(addends, inputNumbers, sumsCount,
                                     addendsIndex, addendsCount,
                                     inputNumbersIndex) == EXIT_FAILURE) {
     return EXIT_FAILURE;
   }
-  // sem_post(can_print_next);
+  sem_post(can_print_next);
+  // sem_wait(&can_print);
   return EXIT_SUCCESS;
 }
 
@@ -191,12 +196,13 @@ int goldbachWeakConjecture(array_int64_t_t* inputNumbers,
     }
   }
   // printing.
-  // sem_wait(can_print);
+  sem_wait(can_print);
   if (printGoldbachWeakConjecture(addends, inputNumbers, sumsCount,
                                   addendsIndex, addendsCount,
                                   inputNumbersIndex) == EXIT_FAILURE) {
     return EXIT_FAILURE;
   }
-  // sem_post(can_print_next);
+  sem_post(can_print_next);
+  // sem_post(&can_print);
   return EXIT_SUCCESS;
 }

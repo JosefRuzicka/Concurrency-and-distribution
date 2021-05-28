@@ -38,6 +38,7 @@ int printGoldbachStrongConjecture(array_int64_t_t* addends,
   assert(addends);
   assert(inputNumbers);
   // printing.
+  printf("%ld:", (inputNumbers->elements[inputNumbersIndex]));
   printf(" %d", sumsCount);
   printf(" sums");
   if (inputNumbers->elements[inputNumbersIndex] < 0) {
@@ -66,10 +67,11 @@ int printGoldbachWeakConjecture(array_int64_t_t* addends,
   assert(addends);
   assert(inputNumbers);
   // printing.
+  printf("%ld:", (inputNumbers->elements[inputNumbersIndex]));
   printf(" %d", sumsCount);
   printf(" sums");
   if (inputNumbers->elements[inputNumbersIndex] < 0) {
-    printf(" : ");
+    printf(": ");
     addendsCount = addendsIndex;
     addendsIndex = 0;
     while (addendsIndex < addendsCount) {
@@ -86,4 +88,12 @@ int printGoldbachWeakConjecture(array_int64_t_t* addends,
   }
   printf("\n");
   return EXIT_SUCCESS;
+}
+
+// prints NA for numbers that are not in range to have their goldbach sums
+// calculated
+void printOutOfRange(array_int64_t_t* inputNumbers, int inputNumbersIndex) {
+  assert(inputNumbers);
+  printf("%ld:", (inputNumbers->elements[inputNumbersIndex]));
+  printf(" NA\n");
 }
