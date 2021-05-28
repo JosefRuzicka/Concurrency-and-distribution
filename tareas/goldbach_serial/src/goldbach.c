@@ -2,8 +2,6 @@
 // Calculates the goldbach Sums of the user-input numbers.
 // 17/5/2021
 
-// #include <errno.h>
-// #include <pthread.h>
 #include "goldbach.h"
 
 #include <assert.h>
