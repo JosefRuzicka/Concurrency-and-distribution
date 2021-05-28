@@ -9,8 +9,19 @@
 #include <assert.h>
 #include <stdlib.h>
 
+/**
+ * @brief Reallocates memory of the array, increasing its capacity.
+ * @details
+ *  @code
+ *    array_int64_t_t array;
+ *    array_int64_t_init(&array);
+ *    array_int64_t_increase_capacity(&array);
+ *  \endcode
+ * @param array: The array to have its memory reallocated.
+ */
 int array_int64_t_increase_capacity(array_int64_t_t* array);
 
+// initializes array.
 int array_int64_t_init(array_int64_t_t* array) {
   assert(array);
   array->capacity = 0;
@@ -19,6 +30,7 @@ int array_int64_t_init(array_int64_t_t* array) {
   return EXIT_SUCCESS;
 }
 
+// frees the memory used by array.
 void array_int64_t_destroy(array_int64_t_t* array) {
   assert(array);
   array->capacity = 0;
@@ -26,6 +38,7 @@ void array_int64_t_destroy(array_int64_t_t* array) {
   free(array->elements);
 }
 
+// adds element to the array.
 int array_int64_t_append(array_int64_t_t* array, int64_t element) {
   assert(array);
   if (array->count == array->capacity) {
@@ -37,6 +50,7 @@ int array_int64_t_append(array_int64_t_t* array, int64_t element) {
   return EXIT_SUCCESS;
 }
 
+// reallocates the memory of the array increasing its capacity.
 int array_int64_t_increase_capacity(array_int64_t_t* array) {
   size_t new_capacity = 10 * (array->capacity ? array->capacity : 1);
   int64_t* new_elements =

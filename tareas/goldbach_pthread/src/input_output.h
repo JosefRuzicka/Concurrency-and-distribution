@@ -5,15 +5,10 @@
 #ifndef INPUT_OUTPUT_H
 #define INPUT_OUTPUT_H
 
-// #include <errno.h>
-// #include <pthread.h>
 #include <stdint.h>
 #include <stdio.h>
 
 #include "array_int64_t.h"
-// #include <unistd.h>
-
-// Method declaration:
 
 /**
  * @brief Ask user for numbers and stores them in dynamic memory.
@@ -94,6 +89,19 @@ int printGoldbachWeakConjecture(array_int64_t_t* addends,
                                 int addendsIndex, int addendsCount,
                                 int inputNumbersIndex);
 
+/**
+ * @brief Prints "NA" to indicates the value is out of range.
+ * @details
+ *  @code
+ *    array_int64_t_t inputNumbers;
+ *    array_int64_t_init(&inputNumbers);
+ *    array_int64_t_append(&inputNumbers, 2);
+ *    printOutOfRange(&inputNumbers, 0);
+ *  \endcode
+ * @param inputNumbers: The array accessed to print its content and the out of
+ * range message.
+ * @param inputNumbersIndex: The index to the element of array to be printed.
+ */
 void printOutOfRange(array_int64_t_t* inputNumbers, int inputNumbersIndex);
 
 #endif  // INPUT_OUTPUT_H
