@@ -5,3 +5,7 @@ tareas/goldbach_serial/goldbach_msan
 tareas/goldbach_serial/goldbach_tsan
 tareas/goldbach_serial/goldbach_ubsan
 tareas/goldbach_serial/input001.txt
+tareas/goldbach_pthread/tests_medium/input020.txt
+tareas/goldbach_pthread/tests_medium/input021.txt
+tareas/goldbach_pthread/tests_medium/input022.txt
+tareas/goldbach_pthread/tests_medium/input023.txt
