@@ -137,12 +137,11 @@ void* run(void* data) {
   const private_data_t* private_data = (private_data_t*)data;
   shared_data_t* shared_data = private_data->shared_data;
   size_t my_position = 0;
-  bool finished = false;
 
   // Thread's task
   // take an index from inputNumbers (while there are still numbers to be
   // calculated) and calculate its sums, then print the result when signaled.
-  while (!finished) {
+  while (shared_data->position < shared_data->inputNumbers.count) {
     // the mutex prevents race conditions while the thread gets the number to be
     // worked on.
     sem_wait(&shared_data->mutex);
@@ -150,13 +149,13 @@ void* run(void* data) {
       my_position = shared_data->position;
       shared_data->position++;
       sem_post(&shared_data->mutex);
+      // distributed section.
       goldbachConjecture(
           &shared_data->inputNumbers, &shared_data->primeNumbers, my_position,
           &shared_data->can_print[my_position],
           &shared_data->can_print[(my_position + 1) %
                                   shared_data->inputNumbers.count]);
     } else {
-      finished = true;
       sem_post(&shared_data->mutex);
     }
   }

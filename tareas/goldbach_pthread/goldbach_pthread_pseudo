@@ -1,0 +1,31 @@
+main(argc, argv[]):
+	shared inputNumbers = getInputNumbers()
+	shared primeNumbers = getPrimeNumbers()
+	shared position = 0
+	
+	for (int 0... shared->inputNumbers.count)
+		shared can_print[index] = create_semaphore(!index)
+
+	for (int 0... shared->THREAD_COUNT):
+		adder = create_thread(shared->THREAD_COUNT)
+		run(adder)
+
+
+run(adder):
+	while (shared->position < shared->inputNumbers.count)
+		sem_wait(shared->mutex)
+			if (shared->position < shared->inputNumbers.count)
+				private->position = shared->position
+				shared->position++
+				sem_post(shared->mutex)
+
+				goldbach(inputNumbers[private->position])
+			
+			else
+				sem_post(shared->mutex)
+			
+		
+	sem_wait(canPrint[private->position])
+		print goldbachSums
+	sem_post(canPrint[private->position + 1])
+	

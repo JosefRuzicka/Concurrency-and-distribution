@@ -2,6 +2,7 @@
     "files.associations": {
         "array_int64_t.h": "c",
         "semaphore.h": "c",
-        "cstdlib": "cpp"
+        "cstdlib": "cpp",
+        "distribution_handler.h": "c"
     }
 }
