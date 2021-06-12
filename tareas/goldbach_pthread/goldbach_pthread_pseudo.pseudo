@@ -2,6 +2,8 @@ main(argc, argv[]):
 	shared inputNumbers = getInputNumbers()
 	shared primeNumbers = getPrimeNumbers()
 	shared position = 0
+
+	shared mutex = create_semaphore(1)
 	
 	for (int 0... shared->inputNumbers.count)
 		shared can_print[index] = create_semaphore(!index)

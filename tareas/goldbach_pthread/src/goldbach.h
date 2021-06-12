@@ -33,14 +33,13 @@ int64_t getLargestNumber(array_int64_t_t* inputNumbers);
  *    array_int64_t_t primeNumbers;
  *    array_int64_t_init(&primeNumbers);
  *    int64_t largestInputNumber = 10
- *    sieveOfEratosthenes(&primeNumbers, largestInputNumber);
+ *    calculatePrimes(&primeNumbers, largestInputNumber);
  *  \endcode
  * @param primeNumbers: array of int64_t on which prime numbers will be stored.
  * @param largestInputNumber: the range to which prime numbers will be
  * calculated.
  */
-int sieveOfEratosthenes(array_int64_t_t* primeNumbers,
-                        int64_t largestInputNumber);
+int calculatePrimes(array_int64_t_t* primeNumbers, int64_t largestInputNumber);
 
 /**
  * @brief calculates the goldbach sums that add up to the input numbers.

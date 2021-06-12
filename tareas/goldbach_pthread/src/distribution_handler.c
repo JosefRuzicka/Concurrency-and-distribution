@@ -39,7 +39,7 @@ int goldbachConjectureDistributed(int argc, char* argv[]) {
     getInputNumbers(input, &shared_data->inputNumbers);
     int64_t largestInputNumber = getLargestNumber(&shared_data->inputNumbers);
     array_int64_t_init(&shared_data->primeNumbers);
-    sieveOfEratosthenes(&shared_data->primeNumbers, largestInputNumber);
+    calculatePrimes(&shared_data->primeNumbers, largestInputNumber);
     //--------------------------
     shared_data->position = 0;
     shared_data->thread_count = sysconf(_SC_NPROCESSORS_ONLN);

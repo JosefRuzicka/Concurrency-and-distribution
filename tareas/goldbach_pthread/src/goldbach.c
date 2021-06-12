@@ -18,8 +18,7 @@
 #include "input_output.h"
 
 // stores prime numbers from 2 to n in dynamic memory.
-int sieveOfEratosthenes(array_int64_t_t* primeNumbers,
-                        int64_t largestInputNumber) {
+int calculatePrimes(array_int64_t_t* primeNumbers, int64_t largestInputNumber) {
   assert(primeNumbers);
   if (primeNumbers) {
     bool isPrime = true;
@@ -27,19 +26,15 @@ int sieveOfEratosthenes(array_int64_t_t* primeNumbers,
     for (int64_t currentPrimeNumber = 2;
          currentPrimeNumber <= largestInputNumber; currentPrimeNumber++) {
       isPrime = true;
-      // sieve.
-      // https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes
-      // Adapted from
-      // https://technotip.com/7469/c-program-to-find-prime-numbers-from-1-to-300-using-for-loop/
+      // Prime numbers calculation.
       for (int dividend = 2; dividend <= sqrtl(currentPrimeNumber);
            dividend++) {
         if ((currentPrimeNumber % dividend == 0) &&
             (currentPrimeNumber != dividend)) {
           isPrime = false;
-          goto nextIteration;
+          break;
         }
       }
-    nextIteration:
       // if the number is prime. add it to the array.
       if (isPrime) {
         array_int64_t_append(primeNumbers, currentPrimeNumber);
