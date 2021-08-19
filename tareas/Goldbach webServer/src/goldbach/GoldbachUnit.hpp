@@ -18,7 +18,7 @@ class GoldbachUnit {
    * @var number Number stored
    * @var isValid Indicate if number is valid
    * */
-  bool isPair;
+  bool isEven;
   bool displaySums;
   std::vector<int64_t> sums;
   int64_t number;
@@ -27,7 +27,7 @@ class GoldbachUnit {
 
  public:
   /// constructor
-  explicit GoldbachUnit(bool isPair = false, bool displaySums = false,
+  explicit GoldbachUnit(bool isEven = false, bool displaySums = false,
                         int64_t number = 0, bool isValid = false,
                         size_t sumsCount = 0);
 
@@ -45,11 +45,11 @@ class GoldbachUnit {
   /**
    *  @brief: returns true if number is even.
    */
-  bool getIsPair();
+  bool getIsEven();
   /**
    *  @brief: setter for isPair.
    */
-  void setIsPair(bool isPair);
+  void setIsEven(bool isEven);
 
   /**
    *  @brief: returns true if number is negative.
@@ -84,7 +84,7 @@ class GoldbachUnit {
   /**
    *  @brief: returns true if number is valid.
    */
-  bool isIsValid();
+  bool getIsValid();
 
   /**
    *  @brief: setter for isValid.

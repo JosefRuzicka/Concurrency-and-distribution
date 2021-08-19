@@ -13,24 +13,24 @@ void GoldbachCalculator::calculateSums(int64_t highestNumber) {
   this->getPrimes(highestNumber);
 
   for (auto& goldbachUnit : this->goldbachUnits) {
-    if (goldbachUnit.isIsValid()) {
-      if (goldbachUnit.getIsPair()) {
-        calculateSumsPair(&goldbachUnit);
+    if (goldbachUnit.getIsValid()) {
+      if (goldbachUnit.getIsEven()) {
+        calculateEvenSums(&goldbachUnit);
       } else {
-        calculateSumsOdd(&goldbachUnit);
+        calculateOddSums(&goldbachUnit);
       }
     }
   }
 }
 
-void GoldbachCalculator::calculateSumsPair(GoldbachUnit* gUnitPair) {
+void GoldbachCalculator::calculateEvenSums(GoldbachUnit* gEvenUnit) {
   int64_t sum = 0;
   size_t primesQuantity = 0;
   size_t sumsCount = 0;
   bool isLower = true;
 
   while (isLower && primesQuantity < this->primesArray.size()) {
-    if (this->primesArray[primesQuantity] >= gUnitPair->getNumber()) {
+    if (this->primesArray[primesQuantity] >= gEvenUnit->getNumber()) {
       isLower = false;
     }
     primesQuantity++;
@@ -46,9 +46,9 @@ void GoldbachCalculator::calculateSumsPair(GoldbachUnit* gUnitPair) {
         sum = prime1 + prime2;
         // If the result of variable <sum> is the goldbach unit number stores
         // the number on the goldbach unit sums array
-        if (sum == gUnitPair->getNumber()) {
-          gUnitPair->getSums().push_back(prime1);
-          gUnitPair->getSums().push_back(prime2);
+        if (sum == gEvenUnit->getNumber()) {
+          gEvenUnit->getSums().push_back(prime1);
+          gEvenUnit->getSums().push_back(prime2);
           sumsCount++;
         }
       }
@@ -57,10 +57,10 @@ void GoldbachCalculator::calculateSumsPair(GoldbachUnit* gUnitPair) {
     printf("ERROR: getPrimes()\n");
   }
   // Assign sums count to the g_unit
-  gUnitPair->setSumsCount(sumsCount);
+  gEvenUnit->setSumsCount(sumsCount);
 }
 
-void GoldbachCalculator::calculateSumsOdd(GoldbachUnit* gUnitOdd) {
+void GoldbachCalculator::calculateOddSums(GoldbachUnit* gUnitOdd) {
   int64_t sum = 0;
   int64_t sumsCount = 0;
   size_t primesQuantity = 0;
@@ -169,10 +169,10 @@ void GoldbachCalculator::processEntry(int64_t entry) {
     isValid = false;
   }
 
-  if (this->isPair(pureValue)) {
-    g_unit.setIsPair(true);
+  if (this->isEven(pureValue)) {
+    g_unit.setIsEven(true);
   } else {
-    g_unit.setIsPair(false);
+    g_unit.setIsEven(false);
   }
   g_unit.setNumber(pureValue);
   g_unit.setIsValid(isValid);
@@ -180,7 +180,7 @@ void GoldbachCalculator::processEntry(int64_t entry) {
   this->goldbachUnits.push_back(g_unit);
 }
 
-bool GoldbachCalculator::isPair(int64_t number) {
+bool GoldbachCalculator::isEven(int64_t number) {
   if (number % 2 == 0) {
     return true;
   }

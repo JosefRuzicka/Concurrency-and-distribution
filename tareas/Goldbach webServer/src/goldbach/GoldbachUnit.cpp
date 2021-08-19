@@ -1,25 +1,23 @@
 #include "GoldbachUnit.hpp"
 
 #include <cstdlib>
-GoldbachUnit::GoldbachUnit(bool isPair, bool displaySums, int64_t number,
+GoldbachUnit::GoldbachUnit(bool isEven, bool displaySums, int64_t number,
                            bool isValid, size_t sumsCount) {
-  this->isPair = isPair;
+  this->isEven = isEven;
   this->displaySums = displaySums;
   this->number = number;
   this->isValid = isValid;
   this->sumsCount = sumsCount;
 }
 
-
 GoldbachUnit::~GoldbachUnit() = default;
 
 void GoldbachUnit::appendToSums(int64_t value) { this->sums.push_back(value); }
 
 // Setters and getters
-// Setters and getters
-bool GoldbachUnit::getIsPair() { return this->isPair; }
+bool GoldbachUnit::getIsEven() { return this->isEven; }
 
-void GoldbachUnit::setIsPair(bool isPair) { this->isPair = isPair; }
+void GoldbachUnit::setIsEven(bool isEven) { this->isEven = isEven; }
 
 bool GoldbachUnit::getDisplaySums() { return this->displaySums; }
 
@@ -35,7 +33,7 @@ int64_t GoldbachUnit::getNumber() { return this->number; }
 
 void GoldbachUnit::setNumber(int64_t number) { this->number = number; }
 
-bool GoldbachUnit::isIsValid() { return this->isValid; }
+bool GoldbachUnit::getIsValid() { return this->isValid; }
 
 void GoldbachUnit::setIsValid(bool isValid) { this->isValid = isValid; }
 

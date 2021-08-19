@@ -27,7 +27,7 @@ class GoldbachCalculator
   int index;
 
   void processEntry(int64_t entry);
-  bool isPair(int64_t number);
+  bool isEven(int64_t number);
 
   /**
    * @brief calculates all the prime int64_t integers from 2 to a given number
@@ -41,14 +41,14 @@ class GoldbachCalculator
    * gUnitPair.
    * @param gUnitPair goldBach unit to be processed
    */
-  void calculateSumsPair(GoldbachUnit *gUnitPair);
+  void calculateEvenSums(GoldbachUnit *gEvenUnit);
 
   /**
    * @brief Calculates all sums of 3 primes that add up to the value of
    * gUnitOdd.
    * @param gUnitPair goldBach unit to be processed
    */
-  void calculateSumsOdd(GoldbachUnit *gUnitOdd);
+  void calculateOddSums(GoldbachUnit *gOddUnit);
 
   /**
    * @brief: for every inputNumber create a goldbach unit and append it to the

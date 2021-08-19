@@ -46,7 +46,7 @@ std::string GoldbachWebApp::assemblyHttpResponseBody(
   {
     for (GoldbachUnit goldbachUnit : goldbachUnits) {
       // Check if goldbach unit is not valid and gives format
-      if (!goldbachUnit.isIsValid()) {
+      if (!goldbachUnit.getIsValid()) {
         if (goldbachUnit.getDisplaySums()) {
           responseBody.append("-");
         }
@@ -65,7 +65,7 @@ std::string GoldbachWebApp::assemblyHttpResponseBody(
           size_t indexSuma;
 
           // Gives format to output if goldbach unit is pair
-          if (goldbachUnit.getIsPair()) {
+          if (goldbachUnit.getIsEven()) {
             for (size_t sumCount = 0; sumCount < sumsCount; sumCount++) {
               indexSuma = sumCount * 2;
               responseBody.append(
