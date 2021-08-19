@@ -1,0 +1,53 @@
+main: 
+    create a wizard for each Process and have him start working.
+
+Wizard:
+    // Program starts here
+    // Read the standard input and create variable 
+    // jobFileName with the arguments.
+    startWorking(argc, argv[]) {
+   
+    // Splits the job's maps.
+    extractWorkOrders() 
+
+    // filter the correctly formatted maps.
+    verifyAllMaps() 
+
+    // Verify that all cells are valid and
+    // assign rows and columns to process the order.
+    processWorkOrders()
+    
+   // Method of the class SpellSimulator to
+   // update every map in the jobFileName.
+    spellSimulator.updateForest()
+}
+SpellSimulator:
+     parallel region {
+
+        // This method Call the cell updater for every cell every night and append the
+        // resulting forest to the forest string. 
+        updateForest() -> this method calls saveForestOnTxt to be done.
+     }
+    
+    // Prints the forests in a txt file.
+    saveForestOnTxt() { 
+
+      // Defines a new name for the file.
+      obtainNewName()
+    }
+
+Forest:
+    // Draws the map of the forest into text
+    forestToString()
+    // To determine if a cell belongs to the border.
+    checkNeighbours() 
+    // Updates a cell to a certain value.
+    updateCell()
+
+WorkOrder:
+    // Return the file name
+    getFileName()
+    // Return the number of nights
+    getNights()
+    // Return true if all nights can be printed.
+    getPrintAllNights()
